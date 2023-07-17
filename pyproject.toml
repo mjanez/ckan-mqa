@@ -1,0 +1,22 @@
+[project]
+name = "ckan-mqa"
+version = "0.1.0"
+description = "Metadata Quality Assessment (MQA) tool"
+authors = [
+    {name = "mjanez",email = "mnl.janez@gmail.com\""},
+]
+dependencies = [
+    "pyshacl>=0.23.0",
+    "rdflib>=6.3.2",
+    "SPARQLWrapper>=2.0.0",
+    "setuptools>=68.0.0",
+    "python-dateutil>=2.8.2",
+    "requests>=2.31.0",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"

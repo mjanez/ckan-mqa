@@ -1,0 +1,20 @@
+name: ckan-mqa
+services:
+  ckan2mqa:
+    container_name: ckan-mqa-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "100m"
+          max-file: "10"
+    ports:
+      # debugpy
+      - "5678:5678"
+    volumes:
+        - ./log:${APP_DIR}/log
+    network_mode: host
