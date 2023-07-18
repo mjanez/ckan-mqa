@@ -14,7 +14,12 @@
 * [Docker](https://docs.docker.com/get-docker/)
 
 ## Overview
-Docker compose environment for development and testing with CKAN Open Data portals.
+`ckan-mqa` offers an all-in-one solution for performing [Metadata Quality Analysis (MQA)](https://data.europa.eu/mqa/methodology) on both CKAN endpoints and the European Data Portal catalogs. MQA is a crucial process to ensure the accuracy, completeness, and reliability of metadata, enhancing the overall data interoperability and accessibility.
+
+This Docker Compose configuration integrates the powerful MQA toolset seamlessly with CKAN endpoints and European Data Portal catalogs, enabling users to perform in-depth assessments of metadata quality effortlessly. The setup provides an efficient way to run comprehensive quality checks on various metadata attributes, including data relevance, schema compliance, data format consistency, and adherence to standard vocabularies.
+
+![5 MQA_dimensions png](https://github.com/mjanez/ckan-mqa/assets/96422458/0c54d8c3-e454-4a6a-bcd6-ebc0a0dae080)
+
 
 >**Note**<br>
 > In the integration with: [mjanez/ckan-docker](https://github.com/mjanez/ckan-docker)[^1], it is possible to test it with a CKAN-type open data portal.
