@@ -1,18 +1,20 @@
-from controller.mqa_evaluate import mqa_evaluate
+# inbuilt libraries
 import os
 import ssl
 import sys
-
-import requests
-from requests.exceptions import HTTPError
-
-from urllib.request import urlopen
 import json
 
+# third-party libraries
+import requests
+from requests.exceptions import HTTPError
+from urllib.request import urlopen
 import rdflib
 
-HYDRA = "http://www.w3.org/ns/hydra/core#"
+# custom functions
+from controller.mqa_evaluate import MqaEvaluate
 
+
+HYDRA = "http://www.w3.org/ns/hydra/core#"
 OUTPUT = "local_evaluation"
 
 def retrieve_hydra_value(graph, property):
@@ -106,7 +108,7 @@ def ckan_evaluation():
     folder = create_folder(ckan_url)
     catalog_file_name = os.path.join(folder,'catalog.ttl')
     catalog_search(ckan_url, catalog_file_name)
-    mqa_evaluate = mqa_evaluate(catalog_file_name, catalog_format= 'turtle')
+    mqa_evaluate = MqaEvaluate(catalog_file_name, catalog_format= 'turtle')
     mqa_evaluate.evaluate()
 
 

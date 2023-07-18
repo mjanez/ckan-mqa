@@ -1,13 +1,16 @@
-from controller.mqa_evaluate import mqa_evaluate
-from SPARQLWrapper import SPARQLWrapper, JSON
-
+# inbuilt libraries
 import os
 import ssl
 
+# third-party libraries
 import rdflib
+from SPARQLWrapper import SPARQLWrapper, JSON
+
+# custom functions
+from controller.mqa_evaluate import MqaEvaluate
+
 
 OUTPUT = "edp/"
-
 EDP_SPARQL = 'https://www.europeandataportal.eu/sparql'
 
 def get_file_name(url):
@@ -174,7 +177,7 @@ def edp_evaluation():
     folder = create_folder('edp_all')
     catalog_file_name = os.path.join(folder,'catalog.ttl')
     search_datasets(EDP_SPARQL, catalog_file_name, 'MNR')
-    mqa_evaluate = mqa_evaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
+    mqa_evaluate = MqaEvaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
     mqa_evaluate.evaluate()
 
 def edp_minint_evaluation():
@@ -182,7 +185,7 @@ def edp_minint_evaluation():
     catalog_file_name = os.path.join(folder,'catalog.ttl')
     publisher = 'http://datos.gob.es/recurso/sector-publico/org/Organismo/E00003801' ## Ministerio del Interior de España
     search_datasets_with_publisher(EDP_SPARQL, catalog_file_name, 'MNR', publisher)
-    mqa_evaluate = mqa_evaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
+    mqa_evaluate = MqaEvaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
     mqa_evaluate.evaluate()
 
 if __name__ == '__main__':

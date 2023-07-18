@@ -2,6 +2,7 @@
 import rdflib
 import rdflib.collection
 
+
 HYDRA = "http://www.w3.org/ns/hydra/core#"
 
 def download_rdf(url, filename):

@@ -26,6 +26,14 @@ First the `.env.example` template and configure by changing the `.env` file. Cha
 cp .env.example .env
 ```
 
+Modify the options:
+- `CKAN_CATALOG_URL`: URL of the CKAN catalog to be downloaded (i.e. `http://localhost:5000/catalog.rdf?q=organization:test`).
+- `APP_DIR`: Path to the application folder in Docker.
+- `TZ`: Timezone.
+- `DCATAP_FILES_VERSION`: DCAT-AP version (Avalaibles: 2.0.1, 2.1.0, 2.1.1).
+- `UPDATE_VOCABS`: Update vocabs from the EU Publications Office (`True` or `False`).
+- `CKAN_METADATA_TYPE`: CKAN Metadata elements type: `ckan_uris` for GeoDCAT-AP schema with all elements described by URIs (e.g. dct:format = <http://publications.europa.eu/resource/authority/file-type/XML>) or `ckan` if used a default schema with elements (e.g. dct:format = "XML").
+
 ### With docker compose
 To deploy the environment, `docker compose` will build the latest image ([`ghcr.io/mjanez/ckan-mqa:latest`](https://github.com/mjanez/ckan-mqa/pkgs/container/ckan-mqa)).
 
@@ -78,14 +86,14 @@ List of *containers*:
 ### Base images
 | Repository | Type | Docker tag | Size | Notes |
 | --- | --- | --- | --- | --- |
-| python 3.11| base image | `python/python:3.11-slim-bullseye` | 45.57 MB |  - |
+| python 3.11| base image | `python/python:3.11-slim` | 45.57 MB |  - |
 
 ### Built images
 | Repository | Type | Docker tag | Size | Notes |
 | --- | --- | --- | --- | --- |
-| mjanez/ckan-mqa| custom image | `mjanez/ckan-mqa:v*.*.*` | 209 MB |  Tag version. |
-| mjanez/ckan-mqa| custom image | `mjanez/ckan-mqa:latest` | 209 MB |  Latest stable version. |
-| mjanez/ckan-mqa| custom image | `mjanez/ckan-mqa:main` | 209 MB |  Dev version.  |
+| mjanez/ckan-mqa| custom image | `mjanez/ckan-mqa:v*.*.*` | 264 MB |  Tag version. |
+| mjanez/ckan-mqa| custom image | `mjanez/ckan-mqa:latest` | 264 MB |  Latest stable version. |
+| mjanez/ckan-mqa| custom image | `mjanez/ckan-mqa:main` | 264 MB |  Dev version.  |
 
 
 [^1]: A custom installation of Docker Compose with specific extensions for spatial data and [GeoDCAT-AP](https://github.com/SEMICeu/GeoDCAT-AP)/[INSPIRE](https://github.com/INSPIRE-MIF/technical-guidelines) metadata [profiles](https://en.wikipedia.org/wiki/Geospatial_metadata).

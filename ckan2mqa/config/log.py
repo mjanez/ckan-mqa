@@ -43,3 +43,15 @@ def log_file(log_folder):
         os.remove(os.path.join(log_folder, log_file))
 
     return logger
+
+def get_log_module():
+    # Get the directory and file name of the current file
+    dir_path, file_name_ext = os.path.split(os.path.abspath(__file__))
+    
+    # Split the file name and extension
+    file_name, file_ext = os.path.splitext(file_name_ext)
+
+    # Create the log module string
+    log_module = f"[{os.path.basename(dir_path)}.{file_name}]"
+    
+    return log_module

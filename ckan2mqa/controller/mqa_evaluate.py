@@ -1,6 +1,12 @@
+# inbuilt libraries
 import urllib.request
 from pyshacl import validate
 import rdflib
+import logging
+
+# custom functions
+from config.log import get_log_module
+
 
 # Info
 FINDABILITY = 'Findability'
@@ -17,6 +23,8 @@ CKAN_URIS = 'ckan_uris'
 CKAN = 'ckan'
 EDP = 'edp'
 NTI = 'nti'
+
+log_module = get_log_module()
 
 def make_request(url):
     request = urllib.request.Request(url)
@@ -49,9 +57,9 @@ def contains_word_vocabulary(vocabulary, word):
     return False
 
 
-class mqa_evaluate:
+class MqaEvaluate:
 
-    def __init__(self, catalog_rdf_file, catalog_rdf_filename, shapes_turtle_file, shapes_vocabulary, shapes_deprecateduris, app_dir = "/app", catalog_format = 'application/rdf+xml', catalog_type = CKAN):
+    def __init__(self, catalog_rdf_file, catalog_rdf_filename, catalog_file_folder, shapes_turtle_file, shapes_vocabulary, shapes_deprecateduris, app_dir = "/app", catalog_format = 'application/rdf+xml', catalog_type = CKAN):
         self.app_dir = app_dir
         self.catalog = catalog_rdf_file
         self.catalog_filename = catalog_rdf_filename
@@ -64,7 +72,8 @@ class mqa_evaluate:
         self.distributionCount = self.count_entities(DISTRIBUTION)
         self.totalPoints = 0
         self.catalog_type = catalog_type
-        self.results_file = open(f"{self.app_dir}/log/mqa/{catalog_rdf_filename}_results.txt", 'w')
+        self.catalog_file_folder = catalog_file_folder
+        self.results_file = open(f"{self.catalog_file_folder}/{self.catalog_filename}_results.txt", 'w')
 
     def shacl(self):
         '''
@@ -82,12 +91,12 @@ class mqa_evaluate:
             r = validate(self.graph, shacl_graph=sg, inference='rdfs', abort_on_first=True)
             conforms, results_graph, results_text = r
             if not conforms:
-                error_file_name = f"{self.app_dir}/log/mqa/{self.catalog_filename}_errors_SHACL.txt"
+                error_file_name = f"{self.catalog_file_folder}/{self.catalog_filename}_errors_SHACL.txt"
                 with open(error_file_name, "w", encoding="utf-8") as text_file:
                     text_file.write(results_text)
             return conforms
         except Exception as err:
-            print(f'Exception occurred: {err}')
+            logging.error(f"{log_module}:Exception occurred: {err}")
             return False
 
     def count_entities(self, entity):
@@ -235,7 +244,7 @@ class mqa_evaluate:
             """)
         count = 0
 
-        error_file_name = f"{self.app_dir}/log/mqa/{self.catalog_filename}_errors_{property.replace(':','_')}.txt"
+        error_file_name = f"{self.catalog_file_folder}/{self.catalog_filename}_errors_{property.replace(':','_')}.txt"
         with open(error_file_name, "w", encoding="utf-8") as text_file:
             for row in qres:
                 url = row["value"]
@@ -547,5 +556,6 @@ class mqa_evaluate:
         self.contextuality_fileSize_available()
         self.contextuality_issued_available()
         self.contextuality_modified_available()
-        self.results_file.write("Total points\t"+ str(self.totalPoints)+'\n')
+        self.results_file.write("Total points\t"+ str(round(self.totalPoints, 2))+'\n')
         self.results_file.close()
+        logging.info(f"{log_module}:{self.catalog_filename} total points: {str(round(self.totalPoints, 2))}/405")

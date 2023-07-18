@@ -1,18 +1,20 @@
-from controller.mqa_evaluate import mqa_evaluate
+# inbuilt libraries
 import os
 import ssl
 import sys
 
+# third-party libraries
 import requests
 from requests.exceptions import HTTPError
-
 from urllib.request import urlopen
 import json
-
 import rdflib
 
-HYDRA = "http://www.w3.org/ns/hydra/core#"
+# custom functions
+from controller.mqa_evaluate import MqaEvaluate
 
+
+HYDRA = "http://www.w3.org/ns/hydra/core#"
 OUTPUT = "edp"
 
 def parse_dataset(id, graph):
@@ -65,7 +67,7 @@ def edp_evaluation():
     folder = create_folder(ckan_url)
     catalog_file_name = os.path.join(folder,'catalog.ttl')
     search(ckan_url, catalog_file_name)
-    mqa_evaluate = mqa_evaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
+    mqa_evaluate = MqaEvaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
     mqa_evaluate.evaluate()
 
 

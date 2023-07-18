@@ -1,9 +1,14 @@
-from controller.mqa_evaluate import mqa_evaluate
-from controller.rdf_management import download_rdf
+# inbuilt libraries
 import os
 import ssl
-import sys
 import logging
+import ptvsd
+from datetime import datetime
+ 
+# custom functions
+from controller.mqa_evaluate import MqaEvaluate
+from controller.rdf_management import download_rdf
+from controller.download_vocabs import main as download_vocabs
 from config.log import log_file
 
 
@@ -16,10 +21,14 @@ MQA_LOG_DIR = os.path.join(APP_DIR, 'log/mqa')
 if not os.path.exists(MQA_LOG_DIR):
     os.makedirs(MQA_LOG_DIR)
 VERSION = os.environ.get("VERSION", "0.1")
-CATALOG_FILENAME = os.environ.get('CATALOG_FILE', 'catalog')
-CATALOG_FILE = f"{APP_DIR}/log/mqa/{CATALOG_FILENAME}.rdf"
+CATALOG_FILENAME = f"catalog_{datetime.today().strftime('%Y-%m-%d')}"
+CATALOG_FILE_FOLDER = f"{MQA_LOG_DIR}/{CATALOG_FILENAME}"
+if not os.path.exists(CATALOG_FILE_FOLDER):
+        os.makedirs(CATALOG_FILE_FOLDER)
+CATALOG_FILE = f"{CATALOG_FILE_FOLDER}/{CATALOG_FILENAME}.rdf"
 CATALOG_FORMAT = "application/rdf+xml"
 DCATAP_FILES_VERSION = os.environ.get('DCATAP_FILES_VERSION', '2.1.1')
+UPDATE_VOCABS = os.environ.get('UPDATE_VOCABS', 'False')
 ## DCAT-AP Files
 SHAPESFILE = f"ckan2mqa/assets/{DCATAP_FILES_VERSION}/dcat-ap_{DCATAP_FILES_VERSION}_shacl_shapes.ttl"
 SHAPESVOCABULARYFILE = f"ckan2mqa/assets/{DCATAP_FILES_VERSION}/dcat-ap_{DCATAP_FILES_VERSION}_shacl_mdr-vocabularies.shape.ttl"
@@ -31,16 +40,19 @@ def main():
     log_file(APP_DIR + "/log")
     logging.info(f"{log_module}:Version: {VERSION}")
     
+    if UPDATE_VOCABS == True or UPDATE_VOCABS == "True":
+        logging.info(f"{log_module}:Update vocabs from EU Vocabularies (https://op.europa.eu/en/web/eu-vocabularies/authority-tables)")
+        download_vocabs()
+        
     if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
         getattr(ssl, '_create_unverified_context', None)):
         ssl._create_default_https_context = ssl._create_unverified_context
-
-    url = CKAN_CATALOG_URL
+   
+    download_rdf(CKAN_CATALOG_URL, CATALOG_FILE)
+    logging.info(f"{log_module}:{CKAN_METADATA_TYPE} catalog: {CKAN_CATALOG_URL} with file: '{CATALOG_FILE}' downloaded. Catalog format: '{CATALOG_FORMAT}' evaluate with DCAT-AP Version: {DCATAP_FILES_VERSION}")
     
-    download_rdf(url, CATALOG_FILE)
-
-    mqa_evaluate = mqa_evaluate(CATALOG_FILE, CATALOG_FILENAME, SHAPESFILE, SHAPESVOCABULARYFILE, SHAPESDEPRECATEDURISFILE, APP_DIR, CATALOG_FORMAT, CKAN_METADATA_TYPE)
-    mqa_evaluate.evaluate() 
+    mqa_evaluation = MqaEvaluate(CATALOG_FILE, CATALOG_FILENAME, CATALOG_FILE_FOLDER, SHAPESFILE, SHAPESVOCABULARYFILE, SHAPESDEPRECATEDURISFILE, APP_DIR, CATALOG_FORMAT, CKAN_METADATA_TYPE)
+    mqa_evaluation.evaluate() 
 
 if __name__ == "__main__":
     if DEV_MODE == True or DEV_MODE == "True":
