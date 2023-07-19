@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    #image: ghcr.io/mjanez/ckan-mqa:latest
+    image: ghcr.io/mjanez/ckan-mqa:latest
     env_file:
       - .env
     logging:

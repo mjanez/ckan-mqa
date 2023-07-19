@@ -1,4 +1,4 @@
-<h1 align="center">CKAN Docker Metadata Quality Assesment (MQA)</h1>
+<h1 align="center">Docker Metadata Quality Assessment (MQA) for CKAN/EDP catalogs</h1>
 <p align="center">
 <a href="https://github.com/mjanez/ckan-mqa"><img src="https://img.shields.io/badge/%20ckan-mqa-brightgreen" alt="mqa2ckan version"></a><a href="https://opensource.org/licenses/MIT"> <img src="https://img.shields.io/badge/license-Unlicense-brightgreen" alt="License: Unlicense"></a> <a href="https://github.com/mjanez/ckan-mqa/actions/workflows/docker/badge.svg" alt="License: Unlicense"></a>
 
@@ -14,7 +14,7 @@
 * [Docker](https://docs.docker.com/get-docker/)
 
 ## Overview
-`ckan-mqa` offers an all-in-one solution for performing [Metadata Quality Analysis (MQA)](https://data.europa.eu/mqa/methodology) on both CKAN endpoints and the European Data Portal catalogs. MQA is a crucial process to ensure the accuracy, completeness, and reliability of metadata, enhancing the overall data interoperability and accessibility.
+`ckan-mqa` offers a Docker Compose solution for performing [Metadata Quality Assessment (MQA)](https://data.europa.eu/mqa/methodology) on both CKAN endpoints and the European Data Portal catalogs. MQA is a crucial process to ensure the accuracy, completeness, and reliability of metadata, enhancing the overall data interoperability and accessibility.
 
 This Docker Compose configuration integrates the powerful MQA toolset seamlessly with CKAN endpoints and European Data Portal catalogs, enabling users to perform in-depth assessments of metadata quality effortlessly. The setup provides an efficient way to run comprehensive quality checks on various metadata attributes, including data relevance, schema compliance, data format consistency, and adherence to standard vocabularies.
 
@@ -22,22 +22,22 @@ This Docker Compose configuration integrates the powerful MQA toolset seamlessly
 
 
 >**Note**<br>
-> In the integration with: [mjanez/ckan-docker](https://github.com/mjanez/ckan-docker)[^1], it is possible to test it with a CKAN-type open data portal.
+> It can be tested with an open data portal of the CKAN type such as: [mjanez/ckan-docker](https://github.com/mjanez/ckan-docker)[^1]
 
 ## Quick start
-First the `.env.example` template and configure by changing the `.env` file. Change `CKAN_CATALOG_URL`,  as well as the DCAT-AP Profile version (`DCATAP_FILES_VERSION`), if needed.
+First copy the `.env.example` template as `.env` and configure by changing the `CKAN_CATALOG_URL`,  as well as the DCAT-AP Profile version (`DCATAP_FILES_VERSION`), if needed.
 
 ```bash
 cp .env.example .env
 ```
 
-Modify the options:
+Custom ennvars:
 - `CKAN_CATALOG_URL`: URL of the CKAN catalog to be downloaded (i.e. `http://localhost:5000/catalog.rdf?q=organization:test`).
 - `APP_DIR`: Path to the application folder in Docker.
 - `TZ`: Timezone.
 - `DCATAP_FILES_VERSION`: DCAT-AP version (Avalaibles: 2.0.1, 2.1.0, 2.1.1).
-- `UPDATE_VOCABS`: Update vocabs from the EU Publications Office (`True` or `False`).
-- `CKAN_METADATA_TYPE`: CKAN Metadata elements type: `ckan_uris` for GeoDCAT-AP schema with all elements described by URIs (e.g. dct:format = <http://publications.europa.eu/resource/authority/file-type/XML>) or `ckan` if used a default schema with elements (e.g. dct:format = "XML").
+- `UPDATE_VOCABS`: Update vocabs from the EU Publications Office at start (`True` or `False`).
+- `CKAN_METADATA_TYPE`: CKAN Metadata elements type: `ckan_uris` for GeoDCAT-AP schema with all elements described by URIs (e.g. `dct:format` = <http://publications.europa.eu/resource/authority/file-type/XML>) or `ckan` if used a CKAN default schema with label metadata elements (e.g. `dct:format` = "XML").
 
 ### With docker compose
 To deploy the environment, `docker compose` will build the latest image ([`ghcr.io/mjanez/ckan-mqa:latest`](https://github.com/mjanez/ckan-mqa/pkgs/container/ckan-mqa)).
