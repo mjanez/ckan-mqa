@@ -1,4 +1,4 @@
-FROM python:3.13.0a3-slim
+FROM python:3.11-slim
 LABEL maintainer="mnl.janez@gmail.com"
 
 ENV APP_DIR=/app
@@ -6,26 +6,22 @@ ENV TZ=UTC
 RUN echo ${TZ} > /etc/timezone
 ENV CKAN_CATALOG_URL=http://localhost:5000/catalog.rdf
 ENV DCATAP_FILES_VERSION=2.1.1
-ENV DEV_MODE=True
-ENV TIMEOUT=10
+ENV DEV_MODE=False
+ENV TIMEOUT=20
 
 RUN apt-get -q -y update && \
-    apt-get install -y wget procps && \
+    apt-get install -y wget && \
     DEBIAN_FRONTEND=noninteractive apt-get -yq install gettext-base && \
     wget -O /wait-for https://raw.githubusercontent.com/eficode/wait-for/v2.2.3/wait-for && \
     chmod +x /wait-for && \
-    python3 -m pip install pdm debugpy
+    python3 -m pip install pdm
 
 WORKDIR ${APP_DIR}
-COPY pyproject.toml pdm.lock .
+COPY pyproject.toml pdm.lock ./
 
 RUN pdm install --no-self --group prod
 
-COPY ckan-mqa/entrypoint_dev.sh entrypoint.sh
+COPY ckan-mqa/docker-entrypoint.d/entrypoint.sh entrypoint.sh
 COPY ckan2mqa ckan2mqa
 
-EXPOSE 5678/TCP
-
-# Set entrypoint with debugpy
-ENTRYPOINT ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "./entrypoint_dev.sh"]
-CMD ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["/bin/bash", "./entrypoint.sh"]

@@ -4,7 +4,7 @@ services:
     container_name: ckan-mqa
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ckan-mqa/Dockerfile
     image: ghcr.io/mjanez/ckan-mqa:latest
     env_file:
       - .env

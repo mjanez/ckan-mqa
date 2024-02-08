@@ -1,29 +1,19 @@
-name: Build and push ckan-mqa image from PR Merge
+name: Build and release image manually
 
-on:
-  pull_request:
-    types:
-        - closed
-    branches:
-        - master
-        - 'ckan-mqa-*.*.*'
-        - '!dev/ckan-mqa-*.*.*'
-        - '!feature/*'
-        - '!fix/*'
+on: workflow_dispatch
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   CONTEXT: .
-  BRANCH: ${{ github.head_ref }}
+  BRANCH: ${{ github.ref_name }}
   DOCKERFILE_PATH: /ckan-mqa
   DOCKERFILE: Dockerfile
 
 jobs:
   docker:
-    name: runner/build-docker-push:${{ github.head_ref }}
+    name: manual/build-docker-push:${{ github.ref_name }}
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
 
     steps:
       - name: Set up QEMU
@@ -58,7 +48,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.head_ref }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
           labels: ${{ steps.meta.outputs.labels }}
           context: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}
           file: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
@@ -70,7 +60,7 @@ jobs:
           no-fail: true
 
       - name: Run Trivy container image vulnerability scanner
-        uses: aquasecurity/trivy-action@0.12.0
+        uses: aquasecurity/trivy-action@0.17.0
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
           format: sarif
