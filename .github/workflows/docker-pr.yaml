@@ -1,4 +1,4 @@
-name: Test ckan-mqa images (PR)
+name: Test ckan-pycsw images (PR)
 
 on:
   pull_request:
@@ -38,6 +38,9 @@ jobs:
           labels: |
             org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/blob/${{ env.BRANCH }}/README.md
             org.opencontainers.image.version=${{ env.BRANCH }}
+
+      - name: Replace slashes in BRANCH to avoid errors
+        run: echo "BRANCH=${BRANCH////_}" >> $GITHUB_ENV
 
       - name: Build to test
         uses: docker/build-push-action@v5

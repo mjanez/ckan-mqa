@@ -11,7 +11,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  TAG: ghcr.io/${{ github.repository }}:${{ github.head_ref }}
   CONTEXT: .
   BRANCH: ${{ github.head_ref }}
   DOCKERFILE_PATH: .
@@ -49,11 +48,14 @@ jobs:
             org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/blob/${{ env.BRANCH }}/README.md
             org.opencontainers.image.version=${{ env.BRANCH }}
 
+      - name: Replace slashes in BRANCH to avoid errors
+        run: echo "BRANCH=${BRANCH////_}" >> $GITHUB_ENV
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ env.TAG }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
           labels: ${{ steps.meta.outputs.labels }}
           context: ${{ env.CONTEXT }}
           file: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
