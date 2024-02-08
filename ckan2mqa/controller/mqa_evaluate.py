@@ -9,6 +9,7 @@ from config.log import get_log_module
 
 
 # Info
+WEIGHT_TOTAL = 405  
 FINDABILITY = 'Findability'
 ACCESIBILITY = 'Accessibility'
 INTEROPERABILITY = 'Interoperability'
@@ -263,11 +264,21 @@ class MqaEvaluate:
         else:
             percentage = 0
         if count > 0:
-            partialPoints = percentage * weight
+            partialPoints = round(percentage * weight, 2)
             self.totalPoints += partialPoints
         else:
             partialPoints = 0
-        self.results_file.write(dimension + "\t" + property + "\t" + str(count) + "\t" + str(population) + "\t" + str(percentage) + "\t" + str(partialPoints) + "\t" + str(weight)+"\n")
+        self.results_file.write(f"{dimension}\t{property}\t{count}\t{population}\t{round(percentage, 2)}\t{partialPoints}\t{weight}\n")
+
+    def get_rating(self):
+        if self.totalPoints >= 351:
+            return "Excellent"
+        elif self.totalPoints >= 221:
+            return "Good"
+        elif self.totalPoints >= 121:
+            return "Sufficient"
+        else:
+            return "Bad"
 
     def findability_keywords_available(self):
         dimension = FINDABILITY
@@ -532,7 +543,7 @@ class MqaEvaluate:
         self.print(dimension, property, count, population, 5)
 
     def evaluate(self):
-        self.results_file.write("Dimension\tIndicator/property\tCount\tPopulation\tPercentage\tPoints\tWeight\n")
+        self.results_file.write(f"Dimension\tIndicator/property\tCount\tPopulation\tPercentage\tPoints\tWeight\n")
         self.findability_keywords_available()
         self.findability_category_available()
         self.findability_spatial_available()
@@ -556,6 +567,9 @@ class MqaEvaluate:
         self.contextuality_fileSize_available()
         self.contextuality_issued_available()
         self.contextuality_modified_available()
-        self.results_file.write("Total points\t"+ str(round(self.totalPoints, 2))+'\n')
+        
+        self.results_file.write(f"Total points\tRating: {self.get_rating()}\t\t\t{round(self.totalPoints/WEIGHT_TOTAL, 2)}\t{round(self.totalPoints, 2)}\t{WEIGHT_TOTAL}\n")
         self.results_file.close()
-        logging.info(f"{log_module}:{self.catalog_filename} total points: {str(round(self.totalPoints, 2))}/405")
+        logging.info(f"{log_module}:{self.catalog_filename} total points: {round(self.totalPoints, 2)}/{WEIGHT_TOTAL}")
+
+
