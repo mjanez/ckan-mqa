@@ -1,4 +1,4 @@
-FROM python:3.13.0a3-slim
+FROM python:3.11-slim
 LABEL maintainer="mnl.janez@gmail.com"
 
 ENV APP_DIR=/app
