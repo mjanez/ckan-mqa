@@ -10,7 +10,7 @@ ENV DEV_MODE=False
 ENV TIMEOUT=20
 
 RUN apt-get -q -y update && \
-    apt-get install -y --no-install-recommends wget=1.21.3-1 gettext-base=0.21-12 && \
+    apt-get install -y --no-install-recommends wget=1.21.3-1+b2 gettext-base=0.21-12 && \
     rm -rf /var/lib/apt/lists/* && \
     wget --progress=dot:giga -O /wait-for https://raw.githubusercontent.com/eficode/wait-for/v2.2.3/wait-for && \
     chmod +x /wait-for && \
@@ -22,6 +22,6 @@ COPY pyproject.toml pdm.lock ./
 RUN pdm install --no-self --group prod
 
 COPY ckan-mqa/docker-entrypoint.d/entrypoint.sh entrypoint.sh
-COPY ./ckan2mqa /ckan2mqa
+COPY ckan2mqa ckan2mqa
 
 ENTRYPOINT ["/bin/bash", "./entrypoint.sh"]
