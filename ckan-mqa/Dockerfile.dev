@@ -10,7 +10,7 @@ ENV DEV_MODE=True
 ENV TIMEOUT=10
 
 RUN apt-get -q -y update && \
-    apt-get install -y --no-install-recommends wget=1.21.3-1 procps=2:4.0.2-3 gettext-base=0.21-12 && \
+    apt-get install -y --no-install-recommends wget=1.21.3-1+b2 procps=2:4.0.2-3 gettext-base=0.21-12 && \
     rm -rf /var/lib/apt/lists/* && \
     wget --progress=dot:giga -O /wait-for https://raw.githubusercontent.com/eficode/wait-for/v2.2.3/wait-for && \
     chmod +x /wait-for && \
