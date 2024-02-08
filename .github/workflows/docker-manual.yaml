@@ -1,27 +1,20 @@
-name: Build and push ckan-mqa image from PR Merge
+name: Build and release image manually
 
-on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
-      - latest
+on: workflow_dispatch
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  TAG: ghcr.io/${{ github.repository }}:${{ github.head_ref }}
+  TAG: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
   CONTEXT: .
-  BRANCH: ${{ github.head_ref }}
+  BRANCH: ${{ github.ref_name }}
   DOCKERFILE_PATH: .
   DOCKERFILE: Dockerfile
 
 jobs:
   docker:
-    name: runner/build-docker-push:${{ github.head_ref }}
+    name: manual/build-docker-push:${{ github.ref_name }}
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
 
     steps:
       - name: Set up QEMU

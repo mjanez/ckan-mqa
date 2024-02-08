@@ -1,28 +1,25 @@
-name: Build and push ckan-mqa image from PR Merge
+name: Test ckan-mqa images (PR)
 
 on:
   pull_request:
-    types:
-      - closed
     branches:
       - main
       - latest
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  TAG: ghcr.io/${{ github.repository }}:${{ github.head_ref }}
-  CONTEXT: .
-  BRANCH: ${{ github.head_ref }}
-  DOCKERFILE_PATH: .
-  DOCKERFILE: Dockerfile
+    REGISTRY: ghcr.io
+    IMAGE_NAME: ${{ github.repository }}
+    CONTEXT: .
+    BRANCH: ${{ github.head_ref }}
+    DOCKERFILE_PATH: .
+    DOCKERFILE: Dockerfile
+    HADOLINT_VERSION: 2.12.0
 
 jobs:
   docker:
-    name: runner/build-docker-push:${{ github.head_ref }}
+    name: runner/test-docker-pr:${{ github.head_ref }}
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
-
+    if: github.event_name == 'pull_request'
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -30,15 +27,8 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Check out code
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Login to registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract Docker metadata
         id: meta
@@ -49,24 +39,29 @@ jobs:
             org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/blob/${{ env.BRANCH }}/README.md
             org.opencontainers.image.version=${{ env.BRANCH }}
 
-      - name: Build and push
+      - name: Build to test
         uses: docker/build-push-action@v5
+        id: docker-push
         with:
-          push: true
-          tags: ${{ env.TAG }}
-          labels: ${{ steps.meta.outputs.labels }}
-          context: ${{ env.CONTEXT }}
-          file: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
+            push: false
+            tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
+            labels: ${{ steps.meta.outputs.labels }}
+            context: ${{ env.CONTEXT }}
+            file: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
 
-      - name: Linting Dockerfile with hadolint in GH Actions
-        uses: hadolint/hadolint-action@v3.1.0
+      - name: Linting Dockerfile and annotate code inline in the github PR viewer
+        id: hadolint
+        uses: jbergstroem/hadolint-gh-action@v1.12.2
         with:
           dockerfile: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
+          version: ${{ env.HADOLINT_VERSION }}
+          annotate: true
+          error_level: -1
 
       - name: Run Trivy container image vulnerability scanner
         uses: aquasecurity/trivy-action@0.17.0
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
+          image-ref:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
           format: sarif
           output: trivy-results.sarif
   
