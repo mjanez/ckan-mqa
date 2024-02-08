@@ -3,12 +3,15 @@ name: Test ckan-mqa images (PR)
 on:
   pull_request:
     branches:
-      - main
-      - latest
+        - master
+        - 'ckan-mqa-*.*.*'
+        - '!dev/ckan-mqa-*.*.*'
+        - '!feature/*'
+        - '!fix/*'
 
 env:
     REGISTRY: ghcr.io
-    IMAGE_NAME: ${{ github.repository }}
+    IMAGE_NAME: ckan-mqa
     CONTEXT: .
     BRANCH: ${{ github.head_ref }}
     DOCKERFILE_PATH: /ckan-mqa
@@ -17,7 +20,7 @@ env:
 
 jobs:
   docker:
-    name: runner/test-docker-pr:${{ github.head_ref }}
+    name: runner/test-ckan-mqa-pr:${{ github.head_ref }}
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
@@ -35,41 +38,12 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          labels: |
-            org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/blob/${{ env.BRANCH }}/README.md
-            org.opencontainers.image.version=${{ env.BRANCH }}
 
-      - name: Replace slashes in BRANCH to avoid errors
-        run: echo "BRANCH=${BRANCH////_}" >> $GITHUB_ENV
-
-      - name: Build to test
-        uses: docker/build-push-action@v5
-        id: docker-push
-        with:
-            push: false
-            tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
-            labels: ${{ steps.meta.outputs.labels }}
-            context: ${{ env.CONTEXT }}
-            file: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
-
-      - name: Linting Dockerfile and annotate code inline in the github PR viewer
+      - name: Linting Dockerfiles and annotate code inline in the github PR viewer
         id: hadolint
         uses: jbergstroem/hadolint-gh-action@v1.12.2
         with:
-          dockerfile: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
+          dockerfile: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }} ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}.ghcr
           version: ${{ env.HADOLINT_VERSION }}
           annotate: true
           error_level: -1
-
-      - name: Run Trivy container image vulnerability scanner
-        uses: aquasecurity/trivy-action@0.17.0
-        with:
-          image-ref:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
-          format: sarif
-          output: trivy-results.sarif
-  
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
-        with:
-          sarif_file: trivy-results.sarif

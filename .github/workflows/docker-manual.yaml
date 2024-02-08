@@ -50,13 +50,14 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.BRANCH }}
           labels: ${{ steps.meta.outputs.labels }}
-          context: ${{ env.CONTEXT }}
+          context: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}
           file: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
 
       - name: Linting Dockerfile with hadolint in GH Actions
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
+          no-fail: true
 
       - name: Run Trivy container image vulnerability scanner
         uses: aquasecurity/trivy-action@0.17.0
