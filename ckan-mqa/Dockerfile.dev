@@ -17,7 +17,7 @@ RUN apt-get -q -y update && \
     python3 -m pip install pdm debugpy
 
 WORKDIR ${APP_DIR}
-COPY pyproject.toml pdm.lock .
+COPY pyproject.toml pdm.lock ./
 
 RUN pdm install --no-self --group prod
 
