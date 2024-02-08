@@ -21,11 +21,11 @@ COPY pyproject.toml pdm.lock .
 
 RUN pdm install --no-self --group prod
 
-COPY ckan-mqa/entrypoint_dev.sh entrypoint.sh
+COPY ckan-mqa/docker-entrypoint.d/entrypoint_dev.sh entrypoint.sh
 COPY ckan2mqa ckan2mqa
 
 EXPOSE 5678/TCP
 
 # Set entrypoint with debugpy
-ENTRYPOINT ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "./entrypoint_dev.sh"]
+ENTRYPOINT ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "./ckan-mqa/docker-entrypoint.d/entrypoint_dev.sh"]
 CMD ["tail", "-f", "/dev/null"]

@@ -21,7 +21,7 @@ COPY pyproject.toml pdm.lock .
 
 RUN pdm install --no-self --group prod
 
-COPY ckan-mqa/entrypoint.sh entrypoint.sh
+COPY ckan-mqa/docker-entrypoint.d/entrypoint.sh entrypoint.sh
 COPY ckan2mqa ckan2mqa
 
 ENTRYPOINT ["/bin/bash", "./entrypoint.sh"]

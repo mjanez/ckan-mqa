@@ -7,7 +7,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   CONTEXT: .
   BRANCH: ${{ github.ref_name }}
-  DOCKERFILE_PATH: .
+  DOCKERFILE_PATH: /ckan-mqa
   DOCKERFILE: Dockerfile
 
 jobs:
