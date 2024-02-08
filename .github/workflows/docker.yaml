@@ -44,7 +44,7 @@ jobs:
 
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           labels: |
@@ -60,7 +60,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}:${{ github.head_ref }}
           labels: ${{ steps.meta.outputs.labels }}
-          context: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}
+          context: ${{ env.CONTEXT }}
           file: ${{ env.CONTEXT }}${{ env.DOCKERFILE_PATH }}/${{ env.DOCKERFILE }}
 
       - name: Linting Dockerfile with hadolint in GH Actions
@@ -77,7 +77,7 @@ jobs:
           output: trivy-results.sarif
   
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: trivy-results.sarif
