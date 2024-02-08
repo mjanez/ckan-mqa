@@ -22,7 +22,7 @@ COPY pyproject.toml pdm.lock ./
 RUN pdm install --no-self --group prod
 
 COPY ckan-mqa/docker-entrypoint.d/entrypoint_dev.sh entrypoint.sh
-COPY ckan2mqa ckan2mqa
+COPY ./ckan2mqa /ckan2mqa
 
 EXPOSE 5678/TCP
 
