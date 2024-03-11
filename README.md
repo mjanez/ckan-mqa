@@ -16,10 +16,10 @@
 ## Overview
 `ckan-mqa` offers a Docker Compose solution for performing [Metadata Quality Assessment (MQA)](https://data.europa.eu/mqa/methodology) on both CKAN endpoints and the European Data Portal catalogs. MQA is a crucial process to ensure the accuracy, completeness, and reliability of metadata, enhancing the overall data interoperability and accessibility.
 
-This Docker Compose configuration integrates the powerful MQA toolset seamlessly with CKAN endpoints and European Data Portal catalogs, enabling users to perform in-depth assessments of metadata quality effortlessly. The setup provides an efficient way to run comprehensive quality checks on various metadata attributes, including data relevance, schema compliance, data format consistency, and adherence to standard vocabularies.
+This Docker Compose configuration enhances a Python MQA software [^1] to integrates the powerful MQA toolset seamlessly with CKAN endpoints and European Data Portal catalogs, enabling users to perform in-depth assessments of metadata quality effortlessly. The setup provides an efficient way to run comprehensive quality checks on various metadata attributes, including data relevance, schema compliance, data format consistency, and adherence to standard vocabularies.
 
 >**Note**<br>
-> It can be tested with an open data portal of the CKAN type such as: [mjanez/ckan-docker](https://github.com/mjanez/ckan-docker)[^1]
+> It can be tested with an open data portal of the CKAN type such as: [mjanez/ckan-docker](https://github.com/mjanez/ckan-docker)[^2]
 
 ### [Metadata Quality Assessment Methodology](https://data.europa.eu/mqa/methodology)
 The MQA measures the quality of various indicators, each indicator is explained in the tables below. The results of the checks are stored as Data Quality Vocabulary ([DQV](https://www.w3.org/TR/vocab-dqv/)) . DQV is a specification of the W3C that is used to describe the quality of a dataset.
@@ -168,4 +168,10 @@ List of *containers*:
 | mjanez/ckan-mqa| custom image | `mjanez/ckan-mqa:main` | 264 MB |  Dev version.  |
 
 
-[^1]: A custom installation of Docker Compose with specific extensions for spatial data and [GeoDCAT-AP](https://github.com/SEMICeu/GeoDCAT-AP)/[INSPIRE](https://github.com/INSPIRE-MIF/technical-guidelines) metadata [profiles](https://en.wikipedia.org/wiki/Geospatial_metadata).
+## License
+Copyright (c) the respective contributors.
+It is open and licensed under the GNU Affero General Public License (AGPL) v3.0 whose full text may be found at:
+http://www.fsf.org/licensing/licenses/agpl-3.0.html
+
+[^1]: Program to test MQA evaluation: Javier Nogueras (jnog@unizar.es), Javier Lacasta (jlacasta@unizar.es), Manuel Ureña (maurena@ujaen.es), F. Javier Ariza (fjariza@ujaen.es), Héctor Ochoa Ortiz (719509@unizar.es). Trafair Project 2020.
+[^2]: A custom installation of Docker Compose with specific extensions for spatial data and [GeoDCAT-AP](https://github.com/SEMICeu/GeoDCAT-AP)/[INSPIRE](https://github.com/INSPIRE-MIF/technical-guidelines) metadata [profiles](https://en.wikipedia.org/wiki/Geospatial_metadata).
