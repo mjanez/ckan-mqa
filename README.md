@@ -137,8 +137,8 @@ docker compose up -d --build
 ### Without Docker
 Dependencies:
 ```bash
-python3 -m pip install --user pip3
-pip3 install pdm
+python3 -m pip install --user pipx
+pipx install pdm
 pdm install --no-self
 ```
 
