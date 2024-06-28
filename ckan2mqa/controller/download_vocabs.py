@@ -48,6 +48,9 @@ SKOS = Namespace("http://www.w3.org/2004/02/skos/core#")
 DC = Namespace("http://purl.org/dc/elements/1.1/")
 APP_DIR = os.environ.get('APP_DIR', '/app')
 VOCABS_DIR = Path(APP_DIR) / "ckan2mqa/assets/vocabs"
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+}
 
 class RdfFile:
     def __init__(self, base_filename, url, description, name):
@@ -164,7 +167,7 @@ def main():
 
     for rdf_file in rdf_files:
         try:
-            response = requests.get(rdf_file.url)
+            response = requests.get(rdf_file.url, headers=headers, timeout=10)
             if response.status_code == 200:
                 rdf_content = response.text
                 extracted_data = rdf_file.extract_description(rdf_content, rdf_file.url)
@@ -173,7 +176,7 @@ def main():
                     save_to_csv(extracted_data, VOCABS_DIR / file_name)
                     logging.info(f"{log_module}:{rdf_file.name} data extracted and saved to {file_name}")
             else:
-                logging.info(f"{log_module}:Failed to retrieve data for URL: {rdf_file.url}. Status Code: {response.status_code}")
+                logging.warning(f"{log_module}:Failed to retrieve data for URL: {rdf_file.url}. Status Code: {response.status_code}")
         except requests.exceptions.RequestException as e:
             logging.error(f"{log_module}:An error occurred for URL: {rdf_file.url}. Error: {e}")
 
