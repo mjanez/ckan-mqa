@@ -14,7 +14,8 @@ services:
           max-file: "10"
     ports:
       # debugpy
-      - "5678:5678"
+      - "${MQA_DEV_PORT}:${MQA_DEV_PORT}"
     volumes:
         - ./log:${APP_DIR}/log
+        - ./ckan2mqa:${APP_DIR}/ckan2mqa
     network_mode: host
