@@ -7,7 +7,8 @@
     <a href="#overview">Overview</a> •
     <a href="#quick-start">Quick start</a> •
     <a href="#debug">Debug</a> •
-    <a href="#containers">Containers</a>
+    <a href="#containers">Containers</a> •
+    <a href="#references">DCAT-AP info</a>
 </p>
 
 **Requirements**:
@@ -18,7 +19,7 @@
 
 This Docker Compose configuration enhances a Python MQA software [^1] to integrates the powerful MQA toolset seamlessly with CKAN endpoints and European Data Portal catalogs, enabling users to perform in-depth assessments of metadata quality effortlessly. The setup provides an efficient way to run comprehensive quality checks on various metadata attributes, including data relevance, schema compliance, data format consistency, and adherence to standard vocabularies.
 
->**Note**<br>
+> [!TIP]
 > It can be tested with an open data portal of the CKAN type such as: [mjanez/ckan-docker](https://github.com/mjanez/ckan-docker)[^2]
 
 ### [Metadata Quality Assessment Methodology](https://data.europa.eu/mqa/methodology)
@@ -119,15 +120,13 @@ docker compose up --build
 docker compose up -d --build
 ```
 
->**Note**:<br>
+> [!NOTE]
 > Deploy the dev (local build) `docker-compose.dev.yml` with:
 >
 >```bash
 > docker compose -f docker-compose.dev.yml up --build
 >```
-
-
->**Note**:<br>
+>
 >If needed, to build a specific container simply run:
 >
 >```bash
@@ -169,23 +168,6 @@ List of *containers*:
 
 
 ## References
->DCAT-AP:
->  - https://github.com/SEMICeu/DCAT-AP/tree/master/releases
->  - https://semiceu.github.io/DCAT-AP/releases/3.0.0/#validation-of-dcat-ap
->
->EU Vocabularies: https://op.europa.eu/en/web/eu-vocabularies/dcat-ap
->
->Validator: 
->- https://www.itb.ec.europa.eu/shacl/dcat-ap/upload
->-  https://github.com/ISAITB/validator-resources-dcat-ap/tree/master#
->
->DCAT-AP Country profile:
->  - https://github.com/diggsweden/DCAT-AP-SE
->  - https://github.com/opendata-swiss/dcat_ap_ch
->
->SHACLs: https://github.com/ISAITB/validator-resources-dcat-ap/blob/baca3adf63d31ee415fa5e769249053ae211414c/resources/config.properties
-
-
 ### DCAT-AP Validator Validation Cases
 The different cases to validate in the [DCAT-AP Validator](https://www.itb.ec.europa.eu/shacl/dcat-ap/upload) are based on the level of completeness of the checks and the incorporation of background knowledge (vocabularies). Each case is designed for a specific data exchange scenario.
 The following describes each case and recommends which one you should use for a CKAN catalog:
@@ -247,6 +229,24 @@ The union of Cases 3, 4, 5, and 6.
 For most use cases, `Case 3: DCAT-AP Base (with background knowledge)` is recommended. It provides comprehensive validation of basic coherence and vocabulary standards compliance.
 If your CKAN catalog uses controlled vocabularies, consider using `Case 6: DCAT-AP Controlled Vocabularies` or `Case 7: DCAT-AP Full (with background knowledge)` for more exhaustive validation.
 Remember, the choice of the appropriate validation case depends on your specific needs and data exchange context.
+
+> [!TIP]
+> 
+> DCAT-AP:
+>  - https://github.com/SEMICeu/DCAT-AP/tree/master/releases
+>  - https://semiceu.github.io/DCAT-AP/releases/3.0.0/#validation-of-dcat-ap
+>
+>EU Vocabularies: https://op.europa.eu/en/web/eu-vocabularies/dcat-ap
+>
+>Validator: 
+>- https://www.itb.ec.europa.eu/shacl/dcat-ap/upload
+>-  https://github.com/ISAITB/validator-resources-dcat-ap/tree/master#
+>
+>DCAT-AP Country profiles:
+>  - https://github.com/diggsweden/DCAT-AP-SE
+>  - https://github.com/opendata-swiss/dcat_ap_ch
+>
+>SHACLs: https://github.com/ISAITB/validator-resources-dcat-ap/blob/baca3adf63d31ee415fa5e769249053ae211414c/resources/config.properties
 
 ## License
 Copyright (c) the respective contributors.
