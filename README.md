@@ -168,6 +168,86 @@ List of *containers*:
 | mjanez/ckan-mqa| custom image | `mjanez/ckan-mqa:main` | 264 MB |  Dev version.  |
 
 
+## References
+>DCAT-AP:
+>  - https://github.com/SEMICeu/DCAT-AP/tree/master/releases
+>  - https://semiceu.github.io/DCAT-AP/releases/3.0.0/#validation-of-dcat-ap
+>
+>EU Vocabularies: https://op.europa.eu/en/web/eu-vocabularies/dcat-ap
+>
+>Validator: 
+>- https://www.itb.ec.europa.eu/shacl/dcat-ap/upload
+>-  https://github.com/ISAITB/validator-resources-dcat-ap/tree/master#
+>
+>DCAT-AP Country profile:
+>  - https://github.com/diggsweden/DCAT-AP-SE
+>  - https://github.com/opendata-swiss/dcat_ap_ch
+>
+>SHACLs: https://github.com/ISAITB/validator-resources-dcat-ap/blob/baca3adf63d31ee415fa5e769249053ae211414c/resources/config.properties
+
+
+### DCAT-AP Validator Validation Cases
+The different cases to validate in the [DCAT-AP Validator](https://www.itb.ec.europa.eu/shacl/dcat-ap/upload) are based on the level of completeness of the checks and the incorporation of background knowledge (vocabularies). Each case is designed for a specific data exchange scenario.
+The following describes each case and recommends which one you should use for a CKAN catalog:
+
+#### Case 1: DCAT-AP Base Zero (no background knowledge)
+Includes all constraints required for technical coherence, excluding range class membership constraints and controlled vocabulary usage.
+
+*SHACL Profiles*: 
+* [2.1.1](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_shapes.ttl)
+* [3.0.0](https://github.com/SEMICeu/DCAT-AP/blob/master/releases/3.0.0/html/shacl/shapes.ttl)
+
+
+#### Case 2: DCAT-AP Ranges Zero (no background knowledge)
+Includes all range class membership constraints.
+
+*SHACL Profiles*: 
+* [2.1.1](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_range.ttl)
+* [3.0.0](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/range.ttl)
+
+#### Case 3: DCAT-AP Base (with background knowledge)
+Extends Case 1 with background knowledge, including all vocabularies used in DCAT-AP.
+
+*SHACL Profiles*: 
+* 2.1.1: [`shapes`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_shapes.ttl) and [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_imports.ttl)
+* 3.0.0: [`shapes`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/shapes.ttl) and [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/imports.ttl)
+
+#### Case 4: DCAT-AP Ranges (with background knowledge)
+Extends Case 2 with background knowledge, adding validation of range class membership and vocabulary standards compliance.
+
+*SHACL Profiles*:
+* 2.1.1: [`range`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_range.ttl) and [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_imports.ttl)
+* 3.0.0: [`range`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/range.ttl) and [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/imports.ttl)
+
+#### Case 5: DCAT-AP Recommendations (with background knowledge)
+Includes all constraints related to recommended properties.
+
+*SHACL Profiles*: 
+* 2.1.1: [`shapes recommended`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_shapes_recommended.ttl) and [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_imports.ttl)
+* 3.0.0: [`shapes recommended`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/shapes_recommended.ttl) and [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/imports.ttl)
+
+
+#### Case 6: DCAT-AP Controlled Vocabularies
+Includes all constraints related to controlled vocabularies.
+
+*SHACL Profiles*: 
+* 2.1.1: [`vocabularies shape`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_mdr-vocabularies.shape.ttl) and [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_mdr_imports.ttl)
+* 3.0.0: [`vocabularies shape`](https://github.com/SEMICeu/DCAT-AP/raw/3.0.0/releases/3.0.0/html/shacl/mdr-vocabularies.shape.ttl) and [`mdr imports`](https://github.com/SEMICeu/DCAT-AP/raw/3.0.0/releases/3.0.0/html/shacl/mdr_imports.ttl)
+
+
+#### Case 7: DCAT-AP Full (with background knowledge)
+The union of Cases 3, 4, 5, and 6.
+
+*SHACL Profiles*: 
+* 2.1.1: [`shapes`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_shapes.ttl), [`shapes recommended`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_shapes_recommended.ttl), [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_imports.ttl), [`range`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_range.ttl) and [`deprecateduris`](https://github.com/SEMICeu/DCAT-AP/raw/2.1.1-draft/releases/2.1.1/dcat-ap_2.1.1_shacl_deprecateduris.ttl)
+* 3.0.0: [`shapes`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/shapes.ttl), [`shapes recommended`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/shapes_recommended.ttl), [`imports`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/imports.ttl), [`range`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/range.ttl) and [`deprecateduris`](https://github.com/SEMICeu/DCAT-AP/raw/gh-pages/releases/3.0.0-draft/html/shacl/deprecateduris.ttl)
+
+
+#### Recommendation:
+For most use cases, `Case 3: DCAT-AP Base (with background knowledge)` is recommended. It provides comprehensive validation of basic coherence and vocabulary standards compliance.
+If your CKAN catalog uses controlled vocabularies, consider using `Case 6: DCAT-AP Controlled Vocabularies` or `Case 7: DCAT-AP Full (with background knowledge)` for more exhaustive validation.
+Remember, the choice of the appropriate validation case depends on your specific needs and data exchange context.
+
 ## License
 Copyright (c) the respective contributors.
 It is open and licensed under the GNU Affero General Public License (AGPL) v3.0 whose full text may be found at:
