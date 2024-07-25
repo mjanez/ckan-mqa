@@ -5,8 +5,7 @@ import os
 from datetime import datetime
 
 
-# Logging
-def log_file(log_folder):
+def log_file(log_folder, debug_mode=False):
     '''
     Starts the logger --log_folder parameter entered
     
@@ -25,11 +24,13 @@ def log_file(log_folder):
     if not os.path.exists(log_folder):
         os.makedirs(log_folder)
 
+    log_level = logging.DEBUG if debug_mode else logging.INFO
+
     logging.basicConfig(
                         handlers=[logging.FileHandler(filename=log_folder + "/ckan2mqa-" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".log", encoding='utf-8', mode='a+')],
                         format="%(asctime)s %(levelname)s::%(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S", 
-                        level=logging.INFO
+                        level=log_level
                         )
     
     log_files = os.listdir(log_folder)

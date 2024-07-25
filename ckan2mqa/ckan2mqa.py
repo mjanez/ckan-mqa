@@ -15,7 +15,9 @@ from config.log import log_file
 # Ennvars
 TZ = os.environ.get('TZ', 'TZ')
 CKAN_CATALOG_URL = os.environ.get('CKAN_CATALOG_URL', 'http://localhost:5000/catalog.rdf')
-DEV_MODE = None
+DEV_MODE = os.environ.get('DEV_MODE', None)
+MQA_DEV_VSCODE = os.environ.get('MQA_DEV_VSCODE', False)
+MQA_DEV_PORT = os.environ.get('MQA_DEV_PORT', 5678)
 APP_DIR = os.environ.get('APP_DIR', '/app')
 MQA_LOG_DIR = os.path.join(APP_DIR, 'log/mqa')
 if not os.path.exists(MQA_LOG_DIR):
@@ -37,7 +39,6 @@ CKAN_METADATA_TYPE = os.environ.get('CKAN_METADATA_TYPE', 'ckan_uris')
 log_module = "[ckan2mqa]"
 
 def main():
-    log_file(APP_DIR + "/log")
     logging.info(f"{log_module}:Version: {VERSION}")
     
     if UPDATE_VOCABS == True or UPDATE_VOCABS == "True":
@@ -51,15 +52,26 @@ def main():
     download_rdf(CKAN_CATALOG_URL, CATALOG_FILE)
     logging.info(f"{log_module}:{CKAN_METADATA_TYPE} catalog: {CKAN_CATALOG_URL} with file: '{CATALOG_FILE}' downloaded. Catalog format: '{CATALOG_FORMAT}' evaluate with DCAT-AP Version: {DCATAP_FILES_VERSION}")
     
+    # Evaluation: Case 6: DCAT-AP Controlled Vocabularies & Case 7: DCAT-AP Full (with background knowledge)
     mqa_evaluation = MqaEvaluate(CATALOG_FILE, CATALOG_FILENAME, CATALOG_FILE_FOLDER, SHAPESFILE, SHAPESVOCABULARYFILE, SHAPESDEPRECATEDURISFILE, APP_DIR, CATALOG_FORMAT, CKAN_METADATA_TYPE)
     mqa_evaluation.evaluate() 
 
 if __name__ == "__main__":
     if DEV_MODE == True or DEV_MODE == "True":
-        # Allow other computers to attach to ptvsd at this IP address and port.
-        ptvsd.enable_attach(address=("0.0.0.0", 5678), redirect_output=True)
+        # Debug mode to log file
+        log_file(APP_DIR + "/log", True)
+        
+        # ptvsd: Python Tools for Visual Studio Code
+        if MQA_DEV_VSCODE == False or MQA_DEV_VSCODE == "False":
+            # Allow other computers to attach to ptvsd at this IP address and port.
+            ptvsd.enable_attach(address=("0.0.0.0", MQA_DEV_PORT), redirect_output=True)
 
-        # Pause the program until a remote debugger is attached
-        ptvsd.wait_for_attach()
+            # Pause the program until a remote debugger is attached
+            ptvsd.wait_for_attach()
+        
+        # Attach Visual Studio Code container debugger
+        else:
+            main()
     else:
+        log_file(APP_DIR + "/log", False)
         main()
