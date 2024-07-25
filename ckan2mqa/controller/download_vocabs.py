@@ -38,7 +38,7 @@ RDF_DATA = [
     {
         "name": "Licenses",
         "base_filename": "licenses",
-        "url": "https://op.europa.eu/o/opportal-service/euvoc-download-handler?cellarURI=http%3A%2F%2Fpublications.europa.eu%2Fresource%2Fcellar%2F9cb1c965-c33a-11ed-a05c-01aa75ed71a1.0001.01%2FDOC_1&fileName=licences-skos-ap-act.rdf",
+        "url": "https://op.europa.eu/o/opportal-service/euvoc-download-handler?cellarURI=http%3A%2F%2Fpublications.europa.eu%2Fresource%2Fdistribution%2Flicence%2F20230927-0%2Frdf%2Fskos_ap_act%2Flicences-skos-ap-act.rdf&fileName=licences-skos-ap-act.rdf",
         "description": "Licenses, CSV fields: URI, Label, EUVocab URI"
     }
     # Add more URLs and their respective configurations here as needed

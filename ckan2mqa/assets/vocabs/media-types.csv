@@ -39,9 +39,11 @@ http://www.iana.org/assignments/media-types/application/ODX,application/ODX
 http://www.iana.org/assignments/media-types/application/PDX,application/PDX
 http://www.iana.org/assignments/media-types/application/QSIG,application/QSIG
 http://www.iana.org/assignments/media-types/application/SGML,application/SGML
+http://www.iana.org/assignments/media-types/application/ST2110-41,application/ST2110-41
 http://www.iana.org/assignments/media-types/application/TETRA_ISI,application/TETRA_ISI
 http://www.iana.org/assignments/media-types/application/ace+cbor,application/ace+cbor
 http://www.iana.org/assignments/media-types/application/ace+json,application/ace+json
+http://www.iana.org/assignments/media-types/application/ace-groupcomm+cbor,application/ace-groupcomm+cbor
 http://www.iana.org/assignments/media-types/application/activemessage,application/activemessage
 http://www.iana.org/assignments/media-types/application/activity+json,application/activity+json
 http://www.iana.org/assignments/media-types/application/aif+cbor,application/aif+cbor
@@ -60,6 +62,8 @@ http://www.iana.org/assignments/media-types/application/alto-networkmap+json,app
 http://www.iana.org/assignments/media-types/application/alto-networkmapfilter+json,application/alto-networkmapfilter+json
 http://www.iana.org/assignments/media-types/application/alto-propmap+json,application/alto-propmap+json
 http://www.iana.org/assignments/media-types/application/alto-propmapparams+json,application/alto-propmapparams+json
+http://www.iana.org/assignments/media-types/application/alto-tips+json,application/alto-tips+json
+http://www.iana.org/assignments/media-types/application/alto-tipsparams+json,application/alto-tipsparams+json
 http://www.iana.org/assignments/media-types/application/alto-updatestreamcontrol+json,application/alto-updatestreamcontrol+json
 http://www.iana.org/assignments/media-types/application/alto-updatestreamparams+json,application/alto-updatestreamparams+json
 http://www.iana.org/assignments/media-types/application/andrew-inset,application/andrew-inset
@@ -81,6 +85,8 @@ http://www.iana.org/assignments/media-types/application/automationml-amlx+zip,ap
 http://www.iana.org/assignments/media-types/application/bacnet-xdd+zip,application/bacnet-xdd+zip
 http://www.iana.org/assignments/media-types/application/batch-SMTP,application/batch-SMTP
 http://www.iana.org/assignments/media-types/application/beep+xml,application/beep+xml
+http://www.iana.org/assignments/media-types/application/bufr,application/bufr
+http://www.iana.org/assignments/media-types/application/c2pa,application/c2pa
 http://www.iana.org/assignments/media-types/application/calendar+json,application/calendar+json
 http://www.iana.org/assignments/media-types/application/calendar+xml,application/calendar+xml
 http://www.iana.org/assignments/media-types/application/call-completion,application/call-completion
@@ -100,6 +106,7 @@ http://www.iana.org/assignments/media-types/application/cdni,application/cdni
 http://www.iana.org/assignments/media-types/application/cea-2018+xml,application/cea-2018+xml
 http://www.iana.org/assignments/media-types/application/cellml+xml,application/cellml+xml
 http://www.iana.org/assignments/media-types/application/cfw,application/cfw
+http://www.iana.org/assignments/media-types/application/cid-edhoc+cbor-seq,application/cid-edhoc+cbor-seq
 http://www.iana.org/assignments/media-types/application/city+json,application/city+json
 http://www.iana.org/assignments/media-types/application/clr,application/clr
 http://www.iana.org/assignments/media-types/application/clue+xml,application/clue+xml
@@ -121,6 +128,7 @@ http://www.iana.org/assignments/media-types/application/csta+xml,application/cst
 http://www.iana.org/assignments/media-types/application/csvm+json,application/csvm+json
 http://www.iana.org/assignments/media-types/application/cwl,application/cwl
 http://www.iana.org/assignments/media-types/application/cwl+json,application/cwl+json
+http://www.iana.org/assignments/media-types/application/cwl+yaml,application/cwl+yaml
 http://www.iana.org/assignments/media-types/application/cwt,application/cwt
 http://www.iana.org/assignments/media-types/application/cybercash,application/cybercash
 http://www.iana.org/assignments/media-types/application/dash+xml,application/dash+xml
@@ -143,6 +151,7 @@ http://www.iana.org/assignments/media-types/application/dssc+der,application/dss
 http://www.iana.org/assignments/media-types/application/dssc+xml,application/dssc+xml
 http://www.iana.org/assignments/media-types/application/dvcs,application/dvcs
 http://www.iana.org/assignments/media-types/application/ecmascript,application/ecmascript
+http://www.iana.org/assignments/media-types/application/edhoc+cbor-seq,application/edhoc+cbor-seq
 http://www.iana.org/assignments/media-types/application/efi,application/efi
 http://www.iana.org/assignments/media-types/application/elm+json,application/elm+json
 http://www.iana.org/assignments/media-types/application/elm+xml,application/elm+xml
@@ -171,9 +180,15 @@ http://www.iana.org/assignments/media-types/application/framework-attributes+xml
 http://www.iana.org/assignments/media-types/application/geo+json,application/geo+json
 http://www.iana.org/assignments/media-types/application/geo+json-seq,application/geo+json-seq
 http://www.iana.org/assignments/media-types/application/geopackage+sqlite3,application/geopackage+sqlite3
+http://www.iana.org/assignments/media-types/application/geoxacml+json,application/geoxacml+json
 http://www.iana.org/assignments/media-types/application/geoxacml+xml,application/geoxacml+xml
 http://www.iana.org/assignments/media-types/application/gltf-buffer,application/gltf-buffer
 http://www.iana.org/assignments/media-types/application/gml+xml,application/gml+xml
+http://www.iana.org/assignments/media-types/application/gnap-binding-jws,application/gnap-binding-jws
+http://www.iana.org/assignments/media-types/application/gnap-binding-jwsd,application/gnap-binding-jwsd
+http://www.iana.org/assignments/media-types/application/gnap-binding-rotation-jws,application/gnap-binding-rotation-jws
+http://www.iana.org/assignments/media-types/application/gnap-binding-rotation-jwsd,application/gnap-binding-rotation-jwsd
+http://www.iana.org/assignments/media-types/application/grib,application/grib
 http://www.iana.org/assignments/media-types/application/gzip,application/gzip
 http://www.iana.org/assignments/media-types/application/held+xml,application/held+xml
 http://www.iana.org/assignments/media-types/application/hl7v2+xml,application/hl7v2+xml
@@ -200,9 +215,11 @@ http://www.iana.org/assignments/media-types/application/jose,application/jose
 http://www.iana.org/assignments/media-types/application/jose+json,application/jose+json
 http://www.iana.org/assignments/media-types/application/jrd+json,application/jrd+json
 http://www.iana.org/assignments/media-types/application/jscalendar+json,application/jscalendar+json
+http://www.iana.org/assignments/media-types/application/jscontact+json,application/jscontact+json
 http://www.iana.org/assignments/media-types/application/json,application/json
 http://www.iana.org/assignments/media-types/application/json-patch+json,application/json-patch+json
 http://www.iana.org/assignments/media-types/application/json-seq,application/json-seq
+http://www.iana.org/assignments/media-types/application/jsonpath,application/jsonpath
 http://www.iana.org/assignments/media-types/application/jwk+json,application/jwk+json
 http://www.iana.org/assignments/media-types/application/jwk-set+json,application/jwk-set+json
 http://www.iana.org/assignments/media-types/application/jwt,application/jwt
@@ -318,6 +335,9 @@ http://www.iana.org/assignments/media-types/application/pls+xml,application/pls+
 http://www.iana.org/assignments/media-types/application/poc-settings+xml,application/poc-settings+xml
 http://www.iana.org/assignments/media-types/application/postscript,application/postscript
 http://www.iana.org/assignments/media-types/application/ppsp-tracker+json,application/ppsp-tracker+json
+http://www.iana.org/assignments/media-types/application/private-token-issuer-directory,application/private-token-issuer-directory
+http://www.iana.org/assignments/media-types/application/private-token-request,application/private-token-request
+http://www.iana.org/assignments/media-types/application/private-token-response,application/private-token-response
 http://www.iana.org/assignments/media-types/application/problem+json,application/problem+json
 http://www.iana.org/assignments/media-types/application/problem+xml,application/problem+xml
 http://www.iana.org/assignments/media-types/application/provenance+xml,application/provenance+xml
@@ -327,10 +347,14 @@ http://www.iana.org/assignments/media-types/application/prs.cyn,application/prs.
 http://www.iana.org/assignments/media-types/application/prs.hpub+zip,application/prs.hpub+zip
 http://www.iana.org/assignments/media-types/application/prs.implied-document+xml,application/prs.implied-document+xml
 http://www.iana.org/assignments/media-types/application/prs.implied-executable,application/prs.implied-executable
+http://www.iana.org/assignments/media-types/application/prs.implied-object+json,application/prs.implied-object+json
+http://www.iana.org/assignments/media-types/application/prs.implied-object+json-seq,application/prs.implied-object+json-seq
+http://www.iana.org/assignments/media-types/application/prs.implied-object+yaml,application/prs.implied-object+yaml
 http://www.iana.org/assignments/media-types/application/prs.implied-structure,application/prs.implied-structure
 http://www.iana.org/assignments/media-types/application/prs.nprend,application/prs.nprend
 http://www.iana.org/assignments/media-types/application/prs.plucker,application/prs.plucker
 http://www.iana.org/assignments/media-types/application/prs.rdf-xml-crypt,application/prs.rdf-xml-crypt
+http://www.iana.org/assignments/media-types/application/prs.vcfbzip2,application/prs.vcfbzip2
 http://www.iana.org/assignments/media-types/application/prs.xsf+xml,application/prs.xsf+xml
 http://www.iana.org/assignments/media-types/application/pskc+xml,application/pskc+xml
 http://www.iana.org/assignments/media-types/application/pvd+json,application/pvd+json
@@ -355,6 +379,7 @@ http://www.iana.org/assignments/media-types/application/rpki-ghostbusters,applic
 http://www.iana.org/assignments/media-types/application/rpki-manifest,application/rpki-manifest
 http://www.iana.org/assignments/media-types/application/rpki-publication,application/rpki-publication
 http://www.iana.org/assignments/media-types/application/rpki-roa,application/rpki-roa
+http://www.iana.org/assignments/media-types/application/rpki-signed-tal,application/rpki-signed-tal
 http://www.iana.org/assignments/media-types/application/rpki-updown,application/rpki-updown
 http://www.iana.org/assignments/media-types/application/rtf,application/rtf
 http://www.iana.org/assignments/media-types/application/rtploopback,application/rtploopback
@@ -413,6 +438,7 @@ http://www.iana.org/assignments/media-types/application/srgs+xml,application/srg
 http://www.iana.org/assignments/media-types/application/sru+xml,application/sru+xml
 http://www.iana.org/assignments/media-types/application/ssml+xml,application/ssml+xml
 http://www.iana.org/assignments/media-types/application/stix+json,application/stix+json
+http://www.iana.org/assignments/media-types/application/stratum,application/stratum
 http://www.iana.org/assignments/media-types/application/swid+cbor,application/swid+cbor
 http://www.iana.org/assignments/media-types/application/swid+xml,application/swid+xml
 http://www.iana.org/assignments/media-types/application/tamp-apex-update,application/tamp-apex-update
@@ -449,6 +475,7 @@ http://www.iana.org/assignments/media-types/application/urc-grpsheet+xml,applica
 http://www.iana.org/assignments/media-types/application/urc-ressheet+xml,application/urc-ressheet+xml
 http://www.iana.org/assignments/media-types/application/urc-targetdesc+xml,application/urc-targetdesc+xml
 http://www.iana.org/assignments/media-types/application/urc-uisocketdesc+xml,application/urc-uisocketdesc+xml
+http://www.iana.org/assignments/media-types/application/vc,application/vc
 http://www.iana.org/assignments/media-types/application/vcard+json,application/vcard+json
 http://www.iana.org/assignments/media-types/application/vcard+xml,application/vcard+xml
 http://www.iana.org/assignments/media-types/application/vemmi,application/vemmi
@@ -462,6 +489,8 @@ http://www.iana.org/assignments/media-types/application/vnd.3gpp-prose-pc3ch+xml
 http://www.iana.org/assignments/media-types/application/vnd.3gpp-prose-pc8+xml,application/vnd.3gpp-prose-pc8+xml
 http://www.iana.org/assignments/media-types/application/vnd.3gpp-v2x-local-service-information,application/vnd.3gpp-v2x-local-service-information
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.5gnas,application/vnd.3gpp.5gnas
+http://www.iana.org/assignments/media-types/application/vnd.3gpp.5gsa2x,application/vnd.3gpp.5gsa2x
+http://www.iana.org/assignments/media-types/application/vnd.3gpp.5gsa2x-local-service-information,application/vnd.3gpp.5gsa2x-local-service-information
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.GMOP+xml,application/vnd.3gpp.GMOP+xml
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.SRVCC-info+xml,application/vnd.3gpp.SRVCC-info+xml
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.access-transfer-events+xml,application/vnd.3gpp.access-transfer-events+xml
@@ -508,6 +537,7 @@ http://www.iana.org/assignments/media-types/application/vnd.3gpp.pfcp,applicatio
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.pic-bw-large,application/vnd.3gpp.pic-bw-large
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.pic-bw-small,application/vnd.3gpp.pic-bw-small
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.pic-bw-var,application/vnd.3gpp.pic-bw-var
+http://www.iana.org/assignments/media-types/application/vnd.3gpp.pinapp-info+xml,application/vnd.3gpp.pinapp-info+xml
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.s1ap,application/vnd.3gpp.s1ap
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.seal-group-doc+xml,application/vnd.3gpp.seal-group-doc+xml
 http://www.iana.org/assignments/media-types/application/vnd.3gpp.seal-info+xml,application/vnd.3gpp.seal-info+xml
@@ -545,6 +575,7 @@ http://www.iana.org/assignments/media-types/application/vnd.SimTech-MindMapper,a
 http://www.iana.org/assignments/media-types/application/vnd.accpac.simply.aso,application/vnd.accpac.simply.aso
 http://www.iana.org/assignments/media-types/application/vnd.accpac.simply.imp,application/vnd.accpac.simply.imp
 http://www.iana.org/assignments/media-types/application/vnd.acm.addressxfer+json,application/vnd.acm.addressxfer+json
+http://www.iana.org/assignments/media-types/application/vnd.acm.chatbot+json,application/vnd.acm.chatbot+json
 http://www.iana.org/assignments/media-types/application/vnd.acucobol,application/vnd.acucobol
 http://www.iana.org/assignments/media-types/application/vnd.acucorp,application/vnd.acucorp
 http://www.iana.org/assignments/media-types/application/vnd.adobe.flash.movie,application/vnd.adobe.flash.movie
@@ -582,6 +613,7 @@ http://www.iana.org/assignments/media-types/application/vnd.anser-web-certificat
 http://www.iana.org/assignments/media-types/application/vnd.antix.game-component,application/vnd.antix.game-component
 http://www.iana.org/assignments/media-types/application/vnd.apache.arrow.file,application/vnd.apache.arrow.file
 http://www.iana.org/assignments/media-types/application/vnd.apache.arrow.stream,application/vnd.apache.arrow.stream
+http://www.iana.org/assignments/media-types/application/vnd.apache.parquet,application/vnd.apache.parquet
 http://www.iana.org/assignments/media-types/application/vnd.apache.thrift.binary,application/vnd.apache.thrift.binary
 http://www.iana.org/assignments/media-types/application/vnd.apache.thrift.compact,application/vnd.apache.thrift.compact
 http://www.iana.org/assignments/media-types/application/vnd.apache.thrift.json,application/vnd.apache.thrift.json
@@ -623,6 +655,8 @@ http://www.iana.org/assignments/media-types/application/vnd.bpf,application/vnd.
 http://www.iana.org/assignments/media-types/application/vnd.bpf3,application/vnd.bpf3
 http://www.iana.org/assignments/media-types/application/vnd.businessobjects,application/vnd.businessobjects
 http://www.iana.org/assignments/media-types/application/vnd.byu.uapi+json,application/vnd.byu.uapi+json
+http://www.iana.org/assignments/media-types/application/vnd.bzip3,application/vnd.bzip3
+http://www.iana.org/assignments/media-types/application/vnd.c3voc.schedule+xml,application/vnd.c3voc.schedule+xml
 http://www.iana.org/assignments/media-types/application/vnd.cab-jscript,application/vnd.cab-jscript
 http://www.iana.org/assignments/media-types/application/vnd.canon-cpdl,application/vnd.canon-cpdl
 http://www.iana.org/assignments/media-types/application/vnd.canon-lips,application/vnd.canon-lips
@@ -758,6 +792,7 @@ http://www.iana.org/assignments/media-types/application/vnd.epson.quickanime,app
 http://www.iana.org/assignments/media-types/application/vnd.epson.salt,application/vnd.epson.salt
 http://www.iana.org/assignments/media-types/application/vnd.epson.ssf,application/vnd.epson.ssf
 http://www.iana.org/assignments/media-types/application/vnd.ericsson.quickcall,application/vnd.ericsson.quickcall
+http://www.iana.org/assignments/media-types/application/vnd.erofs,application/vnd.erofs
 http://www.iana.org/assignments/media-types/application/vnd.espass-espass+zip,application/vnd.espass-espass+zip
 http://www.iana.org/assignments/media-types/application/vnd.eszigno3+xml,application/vnd.eszigno3+xml
 http://www.iana.org/assignments/media-types/application/vnd.etsi.aoc+xml,application/vnd.etsi.aoc+xml
@@ -828,6 +863,7 @@ http://www.iana.org/assignments/media-types/application/vnd.fut-misnet,applicati
 http://www.iana.org/assignments/media-types/application/vnd.futoin+cbor,application/vnd.futoin+cbor
 http://www.iana.org/assignments/media-types/application/vnd.futoin+json,application/vnd.futoin+json
 http://www.iana.org/assignments/media-types/application/vnd.fuzzysheet,application/vnd.fuzzysheet
+http://www.iana.org/assignments/media-types/application/vnd.ga4gh.passport+jwt,application/vnd.ga4gh.passport+jwt
 http://www.iana.org/assignments/media-types/application/vnd.genomatix.tuxedo,application/vnd.genomatix.tuxedo
 http://www.iana.org/assignments/media-types/application/vnd.genozip,application/vnd.genozip
 http://www.iana.org/assignments/media-types/application/vnd.gentics.grd+json,application/vnd.gentics.grd+json
@@ -970,6 +1006,7 @@ http://www.iana.org/assignments/media-types/application/vnd.las,application/vnd.
 http://www.iana.org/assignments/media-types/application/vnd.las.las+json,application/vnd.las.las+json
 http://www.iana.org/assignments/media-types/application/vnd.las.las+xml,application/vnd.las.las+xml
 http://www.iana.org/assignments/media-types/application/vnd.laszip,application/vnd.laszip
+http://www.iana.org/assignments/media-types/application/vnd.ldev.productlicensing,application/vnd.ldev.productlicensing
 http://www.iana.org/assignments/media-types/application/vnd.leap+json,application/vnd.leap+json
 http://www.iana.org/assignments/media-types/application/vnd.liberty-request+xml,application/vnd.liberty-request+xml
 http://www.iana.org/assignments/media-types/application/vnd.llamagraphics.life-balance.desktop,application/vnd.llamagraphics.life-balance.desktop
@@ -999,6 +1036,7 @@ http://www.iana.org/assignments/media-types/application/vnd.medcalcdata,applicat
 http://www.iana.org/assignments/media-types/application/vnd.mediastation.cdkey,application/vnd.mediastation.cdkey
 http://www.iana.org/assignments/media-types/application/vnd.medicalholodeck.recordxr,application/vnd.medicalholodeck.recordxr
 http://www.iana.org/assignments/media-types/application/vnd.meridian-slingshot,application/vnd.meridian-slingshot
+http://www.iana.org/assignments/media-types/application/vnd.mermaid,application/vnd.mermaid
 http://www.iana.org/assignments/media-types/application/vnd.mfmp,application/vnd.mfmp
 http://www.iana.org/assignments/media-types/application/vnd.micro+json,application/vnd.micro+json
 http://www.iana.org/assignments/media-types/application/vnd.micrografx.flo,application/vnd.micrografx.flo
@@ -1062,6 +1100,7 @@ http://www.iana.org/assignments/media-types/application/vnd.ms-wpl,application/v
 http://www.iana.org/assignments/media-types/application/vnd.ms-xpsdocument,application/vnd.ms-xpsdocument
 http://www.iana.org/assignments/media-types/application/vnd.msa-disk-image,application/vnd.msa-disk-image
 http://www.iana.org/assignments/media-types/application/vnd.mseq,application/vnd.mseq
+http://www.iana.org/assignments/media-types/application/vnd.msgpack,application/vnd.msgpack
 http://www.iana.org/assignments/media-types/application/vnd.msign,application/vnd.msign
 http://www.iana.org/assignments/media-types/application/vnd.multiad.creator,application/vnd.multiad.creator
 http://www.iana.org/assignments/media-types/application/vnd.multiad.creator.cif,application/vnd.multiad.creator.cif
@@ -1070,6 +1109,10 @@ http://www.iana.org/assignments/media-types/application/vnd.musician,application
 http://www.iana.org/assignments/media-types/application/vnd.muvee.style,application/vnd.muvee.style
 http://www.iana.org/assignments/media-types/application/vnd.mynfc,application/vnd.mynfc
 http://www.iana.org/assignments/media-types/application/vnd.nacamar.ybrid+json,application/vnd.nacamar.ybrid+json
+http://www.iana.org/assignments/media-types/application/vnd.nato.bindingdataobject+cbor,application/vnd.nato.bindingdataobject+cbor
+http://www.iana.org/assignments/media-types/application/vnd.nato.bindingdataobject+json,application/vnd.nato.bindingdataobject+json
+http://www.iana.org/assignments/media-types/application/vnd.nato.bindingdataobject+xml,application/vnd.nato.bindingdataobject+xml
+http://www.iana.org/assignments/media-types/application/vnd.nato.openxmlformats-package.iepd+zip,application/vnd.nato.openxmlformats-package.iepd+zip
 http://www.iana.org/assignments/media-types/application/vnd.ncd.control,application/vnd.ncd.control
 http://www.iana.org/assignments/media-types/application/vnd.ncd.reference,application/vnd.ncd.reference
 http://www.iana.org/assignments/media-types/application/vnd.nearst.inv+json,application/vnd.nearst.inv+json
@@ -1108,6 +1151,9 @@ http://www.iana.org/assignments/media-types/application/vnd.ntt-local.file-trans
 http://www.iana.org/assignments/media-types/application/vnd.ntt-local.ogw_remote-access,application/vnd.ntt-local.ogw_remote-access
 http://www.iana.org/assignments/media-types/application/vnd.ntt-local.sip-ta_remote,application/vnd.ntt-local.sip-ta_remote
 http://www.iana.org/assignments/media-types/application/vnd.ntt-local.sip-ta_tcp_stream,application/vnd.ntt-local.sip-ta_tcp_stream
+http://www.iana.org/assignments/media-types/application/vnd.oai.workflows,application/vnd.oai.workflows
+http://www.iana.org/assignments/media-types/application/vnd.oai.workflows+json,application/vnd.oai.workflows+json
+http://www.iana.org/assignments/media-types/application/vnd.oai.workflows+yaml,application/vnd.oai.workflows+yaml
 http://www.iana.org/assignments/media-types/application/vnd.oasis.opendocument.base,application/vnd.oasis.opendocument.base
 http://www.iana.org/assignments/media-types/application/vnd.oasis.opendocument.chart,application/vnd.oasis.opendocument.chart
 http://www.iana.org/assignments/media-types/application/vnd.oasis.opendocument.chart-template,application/vnd.oasis.opendocument.chart-template
@@ -1334,6 +1380,7 @@ http://www.iana.org/assignments/media-types/application/vnd.rar,application/vnd.
 http://www.iana.org/assignments/media-types/application/vnd.realvnc.bed,application/vnd.realvnc.bed
 http://www.iana.org/assignments/media-types/application/vnd.recordare.musicxml,application/vnd.recordare.musicxml
 http://www.iana.org/assignments/media-types/application/vnd.recordare.musicxml+xml,application/vnd.recordare.musicxml+xml
+http://www.iana.org/assignments/media-types/application/vnd.relpipe,application/vnd.relpipe
 http://www.iana.org/assignments/media-types/application/vnd.resilient.logic,application/vnd.resilient.logic
 http://www.iana.org/assignments/media-types/application/vnd.restful+json,application/vnd.restful+json
 http://www.iana.org/assignments/media-types/application/vnd.rig.cryptonote,application/vnd.rig.cryptonote
@@ -1478,6 +1525,7 @@ http://www.iana.org/assignments/media-types/application/vnd.wv.csp+xml,applicati
 http://www.iana.org/assignments/media-types/application/vnd.wv.ssp+xml,application/vnd.wv.ssp+xml
 http://www.iana.org/assignments/media-types/application/vnd.xacml+json,application/vnd.xacml+json
 http://www.iana.org/assignments/media-types/application/vnd.xara,application/vnd.xara
+http://www.iana.org/assignments/media-types/application/vnd.xecrets-encrypted,application/vnd.xecrets-encrypted
 http://www.iana.org/assignments/media-types/application/vnd.xfdl,application/vnd.xfdl
 http://www.iana.org/assignments/media-types/application/vnd.xfdl.webform,application/vnd.xfdl.webform
 http://www.iana.org/assignments/media-types/application/vnd.xmi+xml,application/vnd.xmi+xml
@@ -1503,6 +1551,7 @@ http://www.iana.org/assignments/media-types/application/vnd.zul,application/vnd.
 http://www.iana.org/assignments/media-types/application/vnd.zzazz.deck+xml,application/vnd.zzazz.deck+xml
 http://www.iana.org/assignments/media-types/application/voicexml+xml,application/voicexml+xml
 http://www.iana.org/assignments/media-types/application/voucher-cms+json,application/voucher-cms+json
+http://www.iana.org/assignments/media-types/application/vp,application/vp
 http://www.iana.org/assignments/media-types/application/vq-rtcpxr,application/vq-rtcpxr
 http://www.iana.org/assignments/media-types/application/wasm,application/wasm
 http://www.iana.org/assignments/media-types/application/watcherinfo+xml,application/watcherinfo+xml
@@ -1548,6 +1597,7 @@ http://www.iana.org/assignments/media-types/application/yang-data+json,applicati
 http://www.iana.org/assignments/media-types/application/yang-data+xml,application/yang-data+xml
 http://www.iana.org/assignments/media-types/application/yang-patch+json,application/yang-patch+json
 http://www.iana.org/assignments/media-types/application/yang-patch+xml,application/yang-patch+xml
+http://www.iana.org/assignments/media-types/application/yang-sid+json,application/yang-sid+json
 http://www.iana.org/assignments/media-types/application/yin+xml,application/yin+xml
 http://www.iana.org/assignments/media-types/application/zip,application/zip
 http://www.iana.org/assignments/media-types/application/zlib,application/zlib
@@ -1639,11 +1689,14 @@ http://www.iana.org/assignments/media-types/audio/dsr-es202212,audio/dsr-es20221
 http://www.iana.org/assignments/media-types/audio/eac3,audio/eac3
 http://www.iana.org/assignments/media-types/audio/encaprtp,audio/encaprtp
 http://www.iana.org/assignments/media-types/audio/example,audio/example
+http://www.iana.org/assignments/media-types/audio/flac,audio/flac
 http://www.iana.org/assignments/media-types/audio/flexfec,audio/flexfec
 http://www.iana.org/assignments/media-types/audio/fwdred,audio/fwdred
 http://www.iana.org/assignments/media-types/audio/iLBC,audio/iLBC
 http://www.iana.org/assignments/media-types/audio/ip-mr_v2.5,audio/ip-mr_v2.5
+http://www.iana.org/assignments/media-types/audio/matroska,audio/matroska
 http://www.iana.org/assignments/media-types/audio/mhas,audio/mhas
+http://www.iana.org/assignments/media-types/audio/midi-clip,audio/midi-clip
 http://www.iana.org/assignments/media-types/audio/mobile-xmf,audio/mobile-xmf
 http://www.iana.org/assignments/media-types/audio/mp4,audio/mp4
 http://www.iana.org/assignments/media-types/audio/mpa-robust,audio/mpa-robust
@@ -1716,6 +1769,9 @@ http://www.iana.org/assignments/media-types/font/sfnt,font/sfnt
 http://www.iana.org/assignments/media-types/font/ttf,font/ttf
 http://www.iana.org/assignments/media-types/font/woff,font/woff
 http://www.iana.org/assignments/media-types/font/woff2,font/woff2
+http://www.iana.org/assignments/media-types/haptics/hjif,haptics/hjif
+http://www.iana.org/assignments/media-types/haptics/hmpg,haptics/hmpg
+http://www.iana.org/assignments/media-types/haptics/ivs,haptics/ivs
 http://www.iana.org/assignments/media-types/image/aces,image/aces
 http://www.iana.org/assignments/media-types/image/apng,image/apng
 http://www.iana.org/assignments/media-types/image/avci,image/avci
@@ -1742,6 +1798,7 @@ http://www.iana.org/assignments/media-types/image/jph,image/jph
 http://www.iana.org/assignments/media-types/image/jphc,image/jphc
 http://www.iana.org/assignments/media-types/image/jpm,image/jpm
 http://www.iana.org/assignments/media-types/image/jpx,image/jpx
+http://www.iana.org/assignments/media-types/image/jxl,image/jxl
 http://www.iana.org/assignments/media-types/image/jxr,image/jxr
 http://www.iana.org/assignments/media-types/image/jxrA,image/jxrA
 http://www.iana.org/assignments/media-types/image/jxrS,image/jxrS
@@ -1900,6 +1957,7 @@ http://www.iana.org/assignments/media-types/text/provenance-notation,text/proven
 http://www.iana.org/assignments/media-types/text/prs.fallenstein.rst,text/prs.fallenstein.rst
 http://www.iana.org/assignments/media-types/text/prs.lines.tag,text/prs.lines.tag
 http://www.iana.org/assignments/media-types/text/prs.prop.logic,text/prs.prop.logic
+http://www.iana.org/assignments/media-types/text/prs.texi,text/prs.texi
 http://www.iana.org/assignments/media-types/text/raptorfec,text/raptorfec
 http://www.iana.org/assignments/media-types/text/rfc822-headers,text/rfc822-headers
 http://www.iana.org/assignments/media-types/text/rtf,text/rtf
@@ -1948,10 +2006,12 @@ http://www.iana.org/assignments/media-types/text/vnd.si.uricatalogue,text/vnd.si
 http://www.iana.org/assignments/media-types/text/vnd.sosi,text/vnd.sosi
 http://www.iana.org/assignments/media-types/text/vnd.sun.j2me.app-descriptor,text/vnd.sun.j2me.app-descriptor
 http://www.iana.org/assignments/media-types/text/vnd.trolltech.linguist,text/vnd.trolltech.linguist
+http://www.iana.org/assignments/media-types/text/vnd.vcf,text/vnd.vcf
 http://www.iana.org/assignments/media-types/text/vnd.wap.si,text/vnd.wap.si
 http://www.iana.org/assignments/media-types/text/vnd.wap.sl,text/vnd.wap.sl
 http://www.iana.org/assignments/media-types/text/vnd.wap.wml,text/vnd.wap.wml
 http://www.iana.org/assignments/media-types/text/vnd.wap.wmlscript,text/vnd.wap.wmlscript
+http://www.iana.org/assignments/media-types/text/vnd.zoo.kcl,text/vnd.zoo.kcl
 http://www.iana.org/assignments/media-types/text/vtt,text/vtt
 http://www.iana.org/assignments/media-types/text/wgsl,text/wgsl
 http://www.iana.org/assignments/media-types/text/xml,text/xml
@@ -1985,11 +2045,14 @@ http://www.iana.org/assignments/media-types/video/SMPTE292M,video/SMPTE292M
 http://www.iana.org/assignments/media-types/video/VP8,video/VP8
 http://www.iana.org/assignments/media-types/video/VP9,video/VP9
 http://www.iana.org/assignments/media-types/video/encaprtp,video/encaprtp
+http://www.iana.org/assignments/media-types/video/evc,video/evc
 http://www.iana.org/assignments/media-types/video/example,video/example
 http://www.iana.org/assignments/media-types/video/flexfec,video/flexfec
 http://www.iana.org/assignments/media-types/video/iso.segment,video/iso.segment
 http://www.iana.org/assignments/media-types/video/jpeg2000,video/jpeg2000
 http://www.iana.org/assignments/media-types/video/jxsv,video/jxsv
+http://www.iana.org/assignments/media-types/video/matroska,video/matroska
+http://www.iana.org/assignments/media-types/video/matroska-3d,video/matroska-3d
 http://www.iana.org/assignments/media-types/video/mj2,video/mj2
 http://www.iana.org/assignments/media-types/video/mp4,video/mp4
 http://www.iana.org/assignments/media-types/video/mpeg4-generic,video/mpeg4-generic
