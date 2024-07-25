@@ -3,6 +3,8 @@ import urllib.request
 from pyshacl import validate
 import rdflib
 import logging
+import concurrent.futures
+import requests
 
 # custom functions
 from config.log import get_log_module
@@ -19,7 +21,7 @@ DISTRIBUTION = 'dcat:Distribution'
 DATASET = 'dcat:Dataset'
 CODE_200 = ' code=200'
 FROM_VOCABULARY = ' from vocabulary'
-TIMEOUT = 30
+TIMEOUT = 10
 CKAN_URIS = 'ckan_uris'
 CKAN = 'ckan'
 EDP = 'edp'
@@ -27,11 +29,6 @@ NTI = 'nti'
 
 log_module = get_log_module()
 
-def make_request(url):
-    request = urllib.request.Request(url)
-    # Make the HTTP request.
-    response = urllib.request.urlopen(request, timeout = TIMEOUT )
-    assert 200 <= response.code < 400
 
 def load_vocabulary(vocabulary_file, field = 0, app_dir = '/app'):
     vocabulary = []
@@ -57,6 +54,18 @@ def contains_word_vocabulary(vocabulary, word):
             return True
     return False
 
+def make_request(url):
+    try:
+        response = requests.get(url, timeout=TIMEOUT)
+        if 200 <= response.status_code < 400:
+            return True
+        else:
+            print(f"URL {url} returned status code {response.status_code}")
+    except requests.RequestException as e:
+        print(f"RequestException for URL {url}: {e}")
+    except Exception as e:
+        print(f"Exception for URL {url}: {e}")
+    return False
 
 class MqaEvaluate:
 
@@ -229,7 +238,7 @@ class MqaEvaluate:
             if contains_word_vocabulary(vocabulary, value):
                 count += partialCount
         return count
-
+    
     def count_urls_with_200_code(self, property):
         qres = self.graph.query("""
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -243,19 +252,26 @@ class MqaEvaluate:
             }
             GROUP BY ?value
             """)
-        count = 0
 
+        count = 0
         error_file_name = f"{self.catalog_file_folder}/{self.catalog_filename}_errors_{property.replace(':','_')}.txt"
+
         with open(error_file_name, "w", encoding="utf-8") as text_file:
-            for row in qres:
-                url = row["value"]
-                partialCount = int(row["count"])
-                try:
-                    make_request(url)
-                    count += partialCount
-                except:
-                    text_file.write(url + '\t' + str(partialCount) + '\n')
-                    #print(url + " not reached")
+            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+                future_to_url = {executor.submit(make_request, row["value"]): row for row in qres}
+                for future in concurrent.futures.as_completed(future_to_url):
+                    row = future_to_url[future]
+                    url = row["value"]
+                    partialCount = int(row["count"])
+                    try:
+                        if future.result():
+                            count += partialCount
+                        else:
+                            text_file.write(url + '\t' + str(partialCount) + '\n')
+                            print(url + " not reached")
+                    except Exception as exc:
+                        text_file.write(url + '\t' + str(partialCount) + '\n')
+                        print(url + " generated an exception: %s" % exc)
         return count
 
     def print(self, dimension, property, count, population, weight):
@@ -543,33 +559,83 @@ class MqaEvaluate:
         self.print(dimension, property, count, population, 5)
 
     def evaluate(self):
-        self.results_file.write(f"Dimension\tIndicator/property\tCount\tPopulation\tPercentage\tPoints\tWeight\n")
+        logging.debug(f"{log_module}: Starting evaluation process.")
+        
+        self.results_file.write("Dimension\tIndicator/property\tCount\tPopulation\tPercentage\tPoints\tWeight\n")
+        logging.debug(f"{log_module}: Header written to results file.")
+        
+        logging.debug(f"{log_module}: Evaluating findability keywords availability.")
         self.findability_keywords_available()
+        
+        logging.debug(f"{log_module}: Evaluating findability category availability.")
         self.findability_category_available()
+        
+        logging.debug(f"{log_module}: Evaluating findability spatial availability.")
         self.findability_spatial_available()
+        
+        logging.debug(f"{log_module}: Evaluating findability temporal availability.")
         self.findability_temporal_available()
+        
+        logging.debug(f"{log_module}: Evaluating accessibility accessURL code 200.")
         self.accesibility_accessURL_code_200()
+        
+        logging.debug(f"{log_module}: Evaluating accessibility downloadURL availability.")
         self.accesibility_downloadURL_available()
+        
+        logging.debug(f"{log_module}: Evaluating accessibility downloadURL code 200.")
         self.accesibility_downloadURL_code_200()
+        
+        logging.debug(f"{log_module}: Evaluating interoperability format availability.")
         self.interoperability_format_available()
+        
+        logging.debug(f"{log_module}: Evaluating interoperability mediaType availability.")
         self.interoperability_mediaType_available()
+        
+        logging.debug(f"{log_module}: Evaluating interoperability format and mediaType from vocabulary.")
         self.interoperability_format_mediatype_from_vocabulary()
+        
+        logging.debug(f"{log_module}: Evaluating interoperability non-proprietary format.")
         self.interoperability_format_nonProprietary()
+        
+        logging.debug(f"{log_module}: Evaluating interoperability machine-readable format.")
         self.interoperability_format_machineReadable()
+        
+        logging.debug(f"{log_module}: Evaluating interoperability DCAT-AP compliance.")
         self.interoperability_DCAT_AP_compliance()
+        
+        logging.debug(f"{log_module}: Evaluating reusability license availability.")
         self.reusability_license_available()
+        
+        logging.debug(f"{log_module}: Evaluating reusability license from vocabulary.")
         self.reusability_license_from_vocabulary()
+        
+        logging.debug(f"{log_module}: Evaluating reusability access rights availability.")
         self.reusability_accessRights_available()
+        
+        logging.debug(f"{log_module}: Evaluating reusability access rights from vocabulary.")
         self.reusability_accessRights_from_vocabulary()
+        
+        logging.debug(f"{log_module}: Evaluating reusability contact point availability.")
         self.reusability_contactPoint_available()
+        
+        logging.debug(f"{log_module}: Evaluating reusability publisher availability.")
         self.reusability_publisher_available()
+        
+        logging.debug(f"{log_module}: Evaluating contextuality rights availability.")
         self.contextuality_rights_available()
+        
+        logging.debug(f"{log_module}: Evaluating contextuality file size availability.")
         self.contextuality_fileSize_available()
+        
+        logging.debug(f"{log_module}: Evaluating contextuality issued date availability.")
         self.contextuality_issued_available()
+        
+        logging.debug(f"{log_module}: Evaluating contextuality modified date availability.")
         self.contextuality_modified_available()
         
+        logging.debug(f"{log_module}: Writing total points and rating to results file.")
         self.results_file.write(f"Total points\tRating: {self.get_rating()}\t\t\t{round(self.totalPoints/WEIGHT_TOTAL, 2)}\t{round(self.totalPoints, 2)}\t{WEIGHT_TOTAL}\n")
         self.results_file.close()
+        
         logging.info(f"{log_module}:{self.catalog_filename} total points: {round(self.totalPoints, 2)}/{WEIGHT_TOTAL}")
-
 
