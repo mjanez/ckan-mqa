@@ -7,6 +7,8 @@ services:
       dockerfile: ckan-mqa/Dockerfile.dev
     env_file:
       - .env
+    environment:
+      - DEV_MODE=True
     logging:
       driver: "json-file"
       options:
