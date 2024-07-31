@@ -8,49 +8,21 @@ import logging
 
 # custom functions
 from config.log import get_log_module
+from config.defaults import (
+    EU_VOCABULARIES,
+    EUROVOC,
+    SKOS,
+    APP_DIR,
+    VOCABS_DIR,
+    headers
+)
 
 # third-party libraries
-from rdflib import Graph, Namespace, RDF
+from rdflib import Graph, RDF
 from xml.etree import ElementTree as ET
-
 
 log_module = get_log_module()
 
-RDF_DATA = [
-    {
-        "name": "Access Right",
-        "base_filename": "access-right",
-        "url": "http://publications.europa.eu/resource/authority/access-right",
-        "description": "Access rights, CSV fields: URI, Label"
-    },
-    {
-        "name": "File Types",
-        "base_filename": "file-types",
-        "url": "http://op.europa.eu/o/opportal-service/euvoc-download-handler?cellarURI=http%3A%2F%2Fpublications.europa.eu%2Fresource%2Fcellar%2F0e8c3dc2-103f-11ee-b12e-01aa75ed71a1.0001.03%2FDOC_1&fileName=filetypes-skos-ap-act.rdf",
-        "description": "File Types, CSV fields: URI, Label, Non-Proprietary format (true/false)"
-    },
-    {
-        "name": "IANA Media Types",
-        "base_filename": "media-types",
-        "url": "http://www.iana.org/assignments/media-types/media-types.xml",
-        "description": "File Types, CSV fields: URI, Label"
-    },
-    {
-        "name": "Licenses",
-        "base_filename": "licenses",
-        "url": "https://op.europa.eu/o/opportal-service/euvoc-download-handler?cellarURI=http%3A%2F%2Fpublications.europa.eu%2Fresource%2Fdistribution%2Flicence%2F20230927-0%2Frdf%2Fskos_ap_act%2Flicences-skos-ap-act.rdf&fileName=licences-skos-ap-act.rdf",
-        "description": "Licenses, CSV fields: URI, Label, EUVocab URI"
-    }
-    # Add more URLs and their respective configurations here as needed
-]
-EUROVOC = Namespace("http://publications.europa.eu/ontology/euvoc#")
-SKOS = Namespace("http://www.w3.org/2004/02/skos/core#")
-DC = Namespace("http://purl.org/dc/elements/1.1/")
-APP_DIR = os.environ.get('APP_DIR', '/app')
-VOCABS_DIR = Path(APP_DIR) / "ckan2mqa/assets/vocabs"
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-}
 
 class RdfFile:
     def __init__(self, base_filename, url, description, name):
@@ -109,11 +81,11 @@ class FileTypesRdfFile(RdfFile):
                     non_proprietary_data.add((uri, label))
 
         # Save non-proprietary data to separate CSV
-        non_proprietary_file_name = f"non-propietary.csv"
+        non_proprietary_file_name = "non-propietary.csv"
         save_to_csv(non_proprietary_data, VOCABS_DIR / non_proprietary_file_name)
         logging.info(f"{log_module}:Non-proprietary data extracted and saved to {non_proprietary_file_name}")
 
-        machine_readable_file_name = f"machine-readable.csv"
+        machine_readable_file_name = "machine-readable.csv"
         save_to_csv(machine_readable_data, VOCABS_DIR / machine_readable_file_name)
         logging.info(f"{log_module}:Machine-readable data extracted and saved to {machine_readable_file_name}")
 
@@ -148,7 +120,7 @@ def save_to_csv(data, csv_file):
 
 def main():
     rdf_files = []
-    for rdf_data in RDF_DATA:
+    for rdf_data in EU_VOCABULARIES:
         rdf_type = rdf_data["base_filename"]
         url = rdf_data["url"]
         description = rdf_data["description"]

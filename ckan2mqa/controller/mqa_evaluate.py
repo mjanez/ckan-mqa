@@ -8,24 +8,25 @@ import requests
 
 # custom functions
 from config.log import get_log_module
-
-
-# Info
-WEIGHT_TOTAL = 405  
-FINDABILITY = 'Findability'
-ACCESIBILITY = 'Accessibility'
-INTEROPERABILITY = 'Interoperability'
-REUSABILITY = 'Reusability'
-CONTEXTUALITY = 'Contextuality'
-DISTRIBUTION = 'dcat:Distribution'
-DATASET = 'dcat:Dataset'
-CODE_200 = ' code=200'
-FROM_VOCABULARY = ' from vocabulary'
-TIMEOUT = 10
-CKAN_URIS = 'ckan_uris'
-CKAN = 'ckan'
-EDP = 'edp'
-NTI = 'nti'
+from config.defaults import (
+    WEIGHT_TOTAL, 
+    FINDABILITY,
+    ACCESIBILITY,
+    INTEROPERABILITY,
+    REUSABILITY,
+    CONTEXTUALITY,
+    DISTRIBUTION,
+    DATASET,
+    CODE_200,
+    FROM_VOCABULARY,
+    TIMEOUT,
+    CKAN_URIS,
+    CKAN,
+    EDP,
+    NTI,
+    MQA_RATING_THRESHOLDS,
+    MQA_INDICATORS,
+)
 
 log_module = get_log_module()
 
@@ -274,6 +275,7 @@ class MqaEvaluate:
                         print(url + " generated an exception: %s" % exc)
         return count
 
+    # MQA Reports
     def print(self, dimension, property, count, population, weight):
         if population > 0:
             percentage = count / population
@@ -287,351 +289,235 @@ class MqaEvaluate:
         self.results_file.write(f"{dimension}\t{property}\t{count}\t{population}\t{round(percentage, 2)}\t{partialPoints}\t{weight}\n")
 
     def get_rating(self):
-        if self.totalPoints >= 351:
-            return "Excellent"
-        elif self.totalPoints >= 221:
-            return "Good"
-        elif self.totalPoints >= 121:
-            return "Sufficient"
-        else:
-            return "Bad"
+        for rating, threshold in MQA_RATING_THRESHOLDS.items():
+            if self.totalPoints >= threshold:
+                return rating
+        return "Bad"  # Fallback, though it should not be necessary
 
-    def findability_keywords_available(self):
-        dimension = FINDABILITY
-        entity = DATASET
-        property = 'dcat:keyword'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 30)
-
-    def findability_category_available(self):
-        dimension = FINDABILITY
-        entity = DATASET
-        property = 'dcat:theme'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 30)
-
-    def findability_spatial_available(self):
-        dimension = FINDABILITY
-        entity = DATASET
-        property = 'dct:spatial'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 20)
-
-    def findability_temporal_available(self):
-        dimension = FINDABILITY
-        entity = DATASET
-        property = 'dct:temporal'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 20)
-
-    def accesibility_accessURL_code_200(self):
-        dimension = ACCESIBILITY
-        entity = DISTRIBUTION
-        property = 'dcat:accessURL'
-        count = self.count_urls_with_200_code(property)
-        population = self.distributionCount
-        self.print(dimension, property + CODE_200, count, population, 50)
-
-    def accesibility_downloadURL_available(self):
-        dimension = ACCESIBILITY
-        entity = DISTRIBUTION
-        property = 'dcat:downloadURL'
-        count = self.count_entity_property(entity, property)
-        population = self.distributionCount
-        self.print(dimension, property, count, population, 20)
-
-    def accesibility_downloadURL_code_200(self):
-        dimension = ACCESIBILITY
-        entity = DISTRIBUTION
-        property = 'dcat:downloadURL'
-        count = self.count_urls_with_200_code(property)
-        population = self.distributionCount
-        self.print(dimension, property + CODE_200, count, population, 30)
-
-    def interoperability_format_available(self):
-        dimension = INTEROPERABILITY
-        entity = DISTRIBUTION
-        property = 'dct:format'
-        count = self.count_entity_property(entity, property)
-        population = self.distributionCount
-        self.print(dimension, property, count, population, 20)
-
-    def interoperability_mediaType_available(self):
-        dimension = INTEROPERABILITY
-        entity = DISTRIBUTION
-        property = 'dcat:mediaType'
-        count = self.count_entity_property(entity, property)
-        population = self.distributionCount
-        self.print(dimension, property, count, population, 10)
-
+    # MQA Evaluation
     def interoperability_format_from_vocabulary(self):
         '''
         https://www.iana.org/assignments/media-types/media-types.xhtml
         '''
-        dimension = INTEROPERABILITY
-        entity = DISTRIBUTION
-        property = 'dct:format'
+        dimension, entity, property, population_attr, points, count_method = self.get_property_info('interoperability_format_from_vocabulary')
+        
         vocabulary = load_vocabulary('/vocabs/media-types.csv', 0, self.app_dir)
+        
         if self.catalog_type == CKAN_URIS or self.catalog_type == EDP:
-                count = self.count_values_containing_vocabulary(entity,property,vocabulary)
-        # Import vocabs label and count values
+            count = getattr(self, count_method)(entity, property, vocabulary)
         elif self.catalog_type == CKAN:
             vocabulary = load_vocabulary('/vocabs/media-types.csv', 1, self.app_dir)
-            count = self.count_values_contained_in_vocabulary(entity, property, vocabulary)
+            count = getattr(self, count_method)(entity, property, vocabulary)
         else:
-            #NTI
+            # NTI
             count = self.count_nti_formats_from_vocabulary(vocabulary)
-        population = self.distributionCount
-        self.print(dimension, property + FROM_VOCABULARY, count, population, 10)
+        
+        population = getattr(self, population_attr)
+        self.print(dimension, property + FROM_VOCABULARY, count, population, points)
 
     def interoperability_format_mediatype_from_vocabulary(self):
         '''
         dct:format = http://publications.europa.eu/resource/authority/file-type
         dcat:mediaType = https://www.iana.org/assignments/media-types/media-types.xhtml
         '''
-        dimension = INTEROPERABILITY
-        entity = DISTRIBUTION
-        properties = ['dct:format', 'dcat:mediaType']
+        dimension, entity, property, population_attr, points, count_method = self.get_property_info('interoperability_format_mediatype_from_vocabulary')
         vocabulary_files = {
             'dct:format': '/vocabs/file-types.csv',
             'dcat:mediaType': '/vocabs/media-types.csv'
         }
         counts = []
-        for property in properties:
-            vocabulary = load_vocabulary(vocabulary_files[property], 0, self.app_dir)
+        for prop in property:
+            vocabulary = load_vocabulary(vocabulary_files[prop], 0, self.app_dir)
             if self.catalog_type == CKAN_URIS or self.catalog_type == EDP:
-                count = self.count_values_containing_vocabulary(entity, property, vocabulary)
+                count = getattr(self, count_method)(entity, prop, vocabulary)
             elif self.catalog_type == CKAN:
-                vocabulary = load_vocabulary(vocabulary_files[property], 1, self.app_dir)
-                count = self.count_values_contained_in_vocabulary(entity, property, vocabulary)
+                vocabulary = load_vocabulary(vocabulary_files[prop], 1, self.app_dir)
+                count = getattr(self, count_method)(entity, prop, vocabulary)
             else:
                 count = self.count_nti_formats_from_vocabulary(vocabulary)
             counts.append(count)
+
         # population is distributionCount * number of properties
-        population = self.distributionCount * len(properties)
-        self.print(dimension, '/'.join(properties) + FROM_VOCABULARY, sum(counts), population, 10)
+        population = getattr(self, population_attr) * len(property)
+        self.print(dimension, '/'.join(property) if isinstance(property, list) else property + FROM_VOCABULARY, sum(counts), population, points)
 
     def interoperability_format_nonProprietary(self):
         '''
         https://gitlab.com/european-data-portal/edp-vocabularies/-/blob/master/Custom%20Vocabularies/edp-non-proprietary-format.rdf
         '''
-        dimension = INTEROPERABILITY
-        entity = DISTRIBUTION
-        property = 'dct:format'
+        dimension, entity, property, population_attr, points, count_method = self.get_property_info('interoperability_format_nonProprietary')
+        
         vocabulary = load_vocabulary('/vocabs/non-proprietary.csv', 0, self.app_dir)
         if self.catalog_type == CKAN_URIS or self.catalog_type == EDP:
-                count = self.count_values_containing_vocabulary(entity,property,vocabulary)
+                count = getattr(self, count_method)(entity, property, vocabulary)
         # Import vocabs label and count values
         elif self.catalog_type == CKAN:
             vocabulary = load_vocabulary('/vocabs/non-proprietary.csv', 1, self.app_dir)
-            count = self.count_values_contained_in_vocabulary(entity, property, vocabulary)
+            count = getattr(self, count_method)(entity, property, vocabulary)
         else:
             #NTI
             count = self.count_nti_formats_from_vocabulary(vocabulary)  
-        population = self.distributionCount
-        self.print(dimension, property + ' non-proprietary', count, population, 20)
+
+        population = getattr(self, population_attr)
+        self.print(dimension, property + ' non-proprietary', count, population, points)
 
     def interoperability_format_machineReadable(self):
         '''
         https://gitlab.com/european-data-portal/edp-vocabularies/-/blob/master/Custom%20Vocabularies/edp-machine-readable-format.rdf
         '''
-        dimension = INTEROPERABILITY
-        entity = DISTRIBUTION
-        property = 'dct:format'
+        dimension, entity, property, population_attr, points, count_method = self.get_property_info('interoperability_format_machineReadable')
+
         vocabulary = load_vocabulary('/vocabs/machine-readable.csv', 0, self.app_dir)
         if self.catalog_type == CKAN_URIS or self.catalog_type == EDP:
-                count = self.count_values_containing_vocabulary(entity,property,vocabulary)
+                count = getattr(self, count_method)(entity, property, vocabulary)
         # Import vocabs label and count values
         elif self.catalog_type == CKAN:
             vocabulary = load_vocabulary('/vocabs/machine-readable.csv', 1, self.app_dir)
-            count = self.count_values_contained_in_vocabulary(entity, property, vocabulary)
+            count = getattr(self, count_method)(entity, property, vocabulary)
         else:
             #NTI
             count = self.count_nti_formats_from_vocabulary(vocabulary)
-        population = self.distributionCount
-        self.print(dimension, property + ' machine-readable', count, population, 20)
+
+        population = getattr(self, population_attr)
+        self.print(dimension, property + ' machine-readable', count, population, points)
 
     def interoperability_DCAT_AP_compliance(self):
-        dimension = INTEROPERABILITY
-        entity = DATASET
-        property = 'DCAT-AP compliance'
+        dimension, entity, property, population_attr, points, count_method = self.get_property_info('interoperability_DCAT_AP_compliance')
+        
         if self.catalog is not None and self.shapes is not None:
-            conforms = self.shacl()
+            conforms = getattr(self, count_method)()
             if conforms:
-                count = self.datasetCount
+                count = getattr(self, population_attr)
             else:
                 count = 0
         else:
             count = -1
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 30)
-
-    def reusability_license_available(self):
-        dimension = REUSABILITY
-        entity = DISTRIBUTION
-        property = 'dct:license'
-        count = self.count_entity_property(entity, property)
-        population = self.distributionCount
-        self.print(dimension, property, count, population, 20)
+        
+        population = getattr(self, population_attr)
+        self.print(dimension, property, count, population, points)
 
     def reusability_license_from_vocabulary(self):
         '''
         https://gitlab.com/european-data-portal/edp-vocabularies/-/blob/master/Custom%20Vocabularies/edp-licences-skos.rdf
         '''
-        dimension = REUSABILITY
-        entity = DISTRIBUTION
-        property = 'dct:license'
+        dimension, entity, property, population_attr, points, count_method = self.get_property_info('reusability_license_from_vocabulary')
+        
         vocabulary = load_vocabulary('/vocabs/licenses.csv', 0, self.app_dir)
-        count = self.count_values_containing_vocabulary(entity,property,vocabulary)
-        population = self.distributionCount
-        self.print(dimension, property + FROM_VOCABULARY, count, population, 10)
-
-    def reusability_accessRights_available(self):
-        dimension = REUSABILITY
-        entity = DATASET
-        property = 'dct:accessRights'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 10)
+        count = getattr(self, count_method)(entity, property, vocabulary)
+        
+        population = getattr(self, population_attr)
+        self.print(dimension, property + FROM_VOCABULARY, count, population, points)
 
     def reusability_accessRights_from_vocabulary(self):
         '''
         https://gitlab.com/european-data-portal/edp-vocabularies/-/blob/master/EU%20Vocabularies/access-right-skos.rdf
         '''
-        dimension = REUSABILITY
-        entity = DATASET
-        property = 'dct:accessRights'
+        dimension, entity, property, population_attr, points, count_method = self.get_property_info('reusability_accessRights_from_vocabulary')
+        
         vocabulary = load_vocabulary('/vocabs/access-right.csv', 0, self.app_dir)
-        count = self.count_values_contained_in_vocabulary(entity,property,vocabulary)
-        population = self.datasetCount
-        self.print(dimension, property + FROM_VOCABULARY, count, population, 5)
+        count = getattr(self, count_method)(entity, property, vocabulary)
+        
+        population = getattr(self, population_attr)
+        self.print(dimension, property + FROM_VOCABULARY, count, population, points)
 
+    # Define methods that call the evaluate_basic_property function with the appropriate key
+    def findability_keywords_available(self):
+        self.evaluate_basic_property('findability_keywords_available')
+
+    def findability_category_available(self):
+        self.evaluate_basic_property('findability_category_available')
+
+    def findability_spatial_available(self):
+        self.evaluate_basic_property('findability_spatial_available')  
+      
+    def findability_temporal_available(self):
+        self.evaluate_basic_property('findability_temporal_available')
+
+    def accesibility_accessURL_code_200(self):
+        self.evaluate_basic_property('accesibility_accessURL_code_200')
+
+    def accesibility_downloadURL_available(self):
+        self.evaluate_basic_property('accesibility_downloadURL_available')
+
+    def accesibility_downloadURL_code_200(self):
+        self.evaluate_basic_property('accesibility_downloadURL_code_200')
+
+    def interoperability_format_available(self):
+        self.evaluate_basic_property('interoperability_format_available')
+
+    def interoperability_mediaType_available(self):
+        self.evaluate_basic_property('interoperability_mediaType_available')
+
+    def reusability_license_available(self):
+        self.evaluate_basic_property('reusability_license_available')
+    
+    def reusability_accessRights_available(self):
+        self.evaluate_basic_property('reusability_accessRights_available')
+    
     def reusability_contactPoint_available(self):
-        dimension = REUSABILITY
-        entity = DATASET
-        property = 'dcat:contactPoint'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 20)
+        self.evaluate_basic_property('reusability_contactPoint_available')
 
     def reusability_publisher_available(self):
-        dimension = REUSABILITY
-        entity = DATASET
-        property = 'dct:publisher'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 10)
+        self.evaluate_basic_property('reusability_publisher_available')
 
     def contextuality_rights_available(self):
-        dimension = CONTEXTUALITY
-        entity = DISTRIBUTION
-        property = 'dct:rights'
-        count = self.count_entity_property(entity, property)
-        population = self.distributionCount
-        self.print(dimension, property, count, population, 5)
+        self.evaluate_basic_property('contextuality_rights_available')
 
     def contextuality_fileSize_available(self):
-        dimension = CONTEXTUALITY
-        entity = DISTRIBUTION
-        property = 'dcat:byteSize'
-        count = self.count_entity_property(entity, property)
-        population = self.distributionCount
-        self.print(dimension, property, count, population, 5)
+        self.evaluate_basic_property('contextuality_fileSize_available')
 
     def contextuality_issued_available(self):
-        dimension = CONTEXTUALITY
-        entity = DATASET
-        property = 'dct:issued'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 5)
+        self.evaluate_basic_property('contextuality_issued_available')
 
     def contextuality_modified_available(self):
-        dimension = CONTEXTUALITY
-        entity = DATASET
-        property = 'dct:modified'
-        count = self.count_entity_property(entity, property)
-        population = self.datasetCount
-        self.print(dimension, property, count, population, 5)
+        self.evaluate_basic_property('contextuality_modified_available')
 
+    def get_property_info(self, key):
+        property_info = MQA_INDICATORS[key]
+        return (
+            property_info['dimension'],
+            property_info['entity'],
+            property_info['property'],
+            property_info['population_attr'],
+            property_info['points'],
+            property_info['count_method']
+        )
+
+    def evaluate_basic_property(self, property_key):
+        if property_key not in MQA_INDICATORS:
+            raise ValueError(f"Property key {property_key} not found in MQA_INDICATORS dictionary.")
+        
+        prop_info = MQA_INDICATORS[property_key]
+        dimension = prop_info['dimension']
+        entity = prop_info['entity']
+        property = prop_info['property']
+        population_attr = prop_info['population_attr']
+        points = prop_info['points']
+        count_method = prop_info['count_method']
+        property_suffix = prop_info.get('property_suffix', '')
+    
+        if count_method == 'count_entity_property':
+            count = self.count_entity_property(entity, property)
+        elif count_method == 'count_urls_with_200_code':
+            count = self.count_urls_with_200_code(property)
+        else:
+            raise ValueError(f"Unknown count method {count_method} for property key {property_key}.")
+        
+        population = getattr(self, population_attr)
+        self.print(dimension, property + property_suffix, count, population, points)   
+     
     def evaluate(self):
         logging.debug(f"{log_module}: Starting evaluation process.")
         
         self.results_file.write("Dimension\tIndicator/property\tCount\tPopulation\tPercentage\tPoints\tWeight\n")
         logging.debug(f"{log_module}: Header written to results file.")
         
-        logging.debug(f"{log_module}: Evaluating findability keywords availability.")
-        self.findability_keywords_available()
-        
-        logging.debug(f"{log_module}: Evaluating findability category availability.")
-        self.findability_category_available()
-        
-        logging.debug(f"{log_module}: Evaluating findability spatial availability.")
-        self.findability_spatial_available()
-        
-        logging.debug(f"{log_module}: Evaluating findability temporal availability.")
-        self.findability_temporal_available()
-        
-        logging.debug(f"{log_module}: Evaluating accessibility accessURL code 200.")
-        self.accesibility_accessURL_code_200()
-        
-        logging.debug(f"{log_module}: Evaluating accessibility downloadURL availability.")
-        self.accesibility_downloadURL_available()
-        
-        logging.debug(f"{log_module}: Evaluating accessibility downloadURL code 200.")
-        self.accesibility_downloadURL_code_200()
-        
-        logging.debug(f"{log_module}: Evaluating interoperability format availability.")
-        self.interoperability_format_available()
-        
-        logging.debug(f"{log_module}: Evaluating interoperability mediaType availability.")
-        self.interoperability_mediaType_available()
-        
-        logging.debug(f"{log_module}: Evaluating interoperability format and mediaType from vocabulary.")
-        self.interoperability_format_mediatype_from_vocabulary()
-        
-        logging.debug(f"{log_module}: Evaluating interoperability non-proprietary format.")
-        self.interoperability_format_nonProprietary()
-        
-        logging.debug(f"{log_module}: Evaluating interoperability machine-readable format.")
-        self.interoperability_format_machineReadable()
-        
-        logging.debug(f"{log_module}: Evaluating interoperability DCAT-AP compliance.")
-        self.interoperability_DCAT_AP_compliance()
-        
-        logging.debug(f"{log_module}: Evaluating reusability license availability.")
-        self.reusability_license_available()
-        
-        logging.debug(f"{log_module}: Evaluating reusability license from vocabulary.")
-        self.reusability_license_from_vocabulary()
-        
-        logging.debug(f"{log_module}: Evaluating reusability access rights availability.")
-        self.reusability_accessRights_available()
-        
-        logging.debug(f"{log_module}: Evaluating reusability access rights from vocabulary.")
-        self.reusability_accessRights_from_vocabulary()
-        
-        logging.debug(f"{log_module}: Evaluating reusability contact point availability.")
-        self.reusability_contactPoint_available()
-        
-        logging.debug(f"{log_module}: Evaluating reusability publisher availability.")
-        self.reusability_publisher_available()
-        
-        logging.debug(f"{log_module}: Evaluating contextuality rights availability.")
-        self.contextuality_rights_available()
-        
-        logging.debug(f"{log_module}: Evaluating contextuality file size availability.")
-        self.contextuality_fileSize_available()
-        
-        logging.debug(f"{log_module}: Evaluating contextuality issued date availability.")
-        self.contextuality_issued_available()
-        
-        logging.debug(f"{log_module}: Evaluating contextuality modified date availability.")
-        self.contextuality_modified_available()
+        for key, value in MQA_INDICATORS.items():
+            log_message = value['log_message']
+            function_name = value['function']
+            
+            logging.debug(f"{log_module}: {log_message}")
+            getattr(self, function_name)()
         
         logging.debug(f"{log_module}: Writing total points and rating to results file.")
         self.results_file.write(f"Total points\tRating: {self.get_rating()}\t\t\t{round(self.totalPoints/WEIGHT_TOTAL, 2)}\t{round(self.totalPoints, 2)}\t{WEIGHT_TOTAL}\n")
