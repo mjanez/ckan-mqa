@@ -9,13 +9,20 @@ import requests
 from requests.exceptions import HTTPError
 from urllib.request import urlopen
 import rdflib
+from urllib.parse import urlparse
 
 # custom functions
 from controller.mqa_evaluate import MqaEvaluate
+from config.defaults import (
+    HYDRA,
+    CKAN_API_OUTPUT as OUTPUT,
+    EVALUATION_DEFAULT_FORMAT
+)
 
-
-HYDRA = "http://www.w3.org/ns/hydra/core#"
-OUTPUT = "local_evaluation"
+def get_base_url(full_url):
+    parsed_url = urlparse(full_url)
+    base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    return base_url
 
 def retrieve_hydra_value(graph, property):
     result = None
@@ -104,16 +111,16 @@ def create_folder(ckan_url):
     return output_path
 
 def ckan_evaluation():
-    ckan_url = 'http://localhost:5000'
+    ckan_catalog_url = os.environ.get('CKAN_CATALOG_URL', 'http://localhost:5000')
+    ckan_url = get_base_url(ckan_catalog_url)
     folder = create_folder(ckan_url)
-    catalog_file_name = os.path.join(folder,'catalog.ttl')
+    catalog_file_name = os.path.join(folder, EVALUATION_DEFAULT_FORMAT)
     catalog_search(ckan_url, catalog_file_name)
     mqa_evaluate = MqaEvaluate(catalog_file_name, catalog_format= 'turtle')
     mqa_evaluate.evaluate()
 
 
 if __name__ == '__main__':
-
 
     if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
             getattr(ssl, '_create_unverified_context', None)):

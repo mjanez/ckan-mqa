@@ -12,16 +12,19 @@ import rdflib
 
 # custom functions
 from controller.mqa_evaluate import MqaEvaluate
-
-
-HYDRA = "http://www.w3.org/ns/hydra/core#"
-OUTPUT = "edp"
+from config.defaults import (
+    HYDRA,
+    CKAN_API_OUTPUT as OUTPUT,
+    EVALUATION_DEFAULT_FORMAT,
+    EDP_API_CKAN_BASE_URL,
+    EDP_API_CKAN_URL
+)
 
 def parse_dataset(id, graph):
     """
     Downloads the file in url (intended to be the RDF end-point of a CKAN site) and stores it in filename
     """
-    ttl_url = 'https://www.europeandataportal.eu/data/api/datasets/'+ id + '.ttl?useNormalizedId=true&locale=en'
+    ttl_url = EDP_API_CKAN_BASE_URL / 'data/api/datasets/'+ id + '.ttl?useNormalizedId=true&locale=en'
     print(ttl_url)
     try:
         graph.parse(ttl_url, format="turtle")
@@ -63,10 +66,9 @@ def create_folder(ckan_url):
     return output_path
 
 def edp_evaluation():
-    ckan_url = 'https://www.europeandataportal.eu/data/search'
-    folder = create_folder(ckan_url)
-    catalog_file_name = os.path.join(folder,'catalog.ttl')
-    search(ckan_url, catalog_file_name)
+    folder = create_folder(EDP_API_CKAN_URL)
+    catalog_file_name = os.path.join(folder, EVALUATION_DEFAULT_FORMAT)
+    search(EDP_API_CKAN_URL, catalog_file_name)
     mqa_evaluate = MqaEvaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
     mqa_evaluate.evaluate()
 

@@ -8,10 +8,16 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 
 # custom functions
 from controller.mqa_evaluate import MqaEvaluate
+from config.defaults import (
+    HYDRA,
+    CKAN_API_OUTPUT as OUTPUT,
+    EVALUATION_DEFAULT_FORMAT,
+    EDP_API_CKAN_BASE_URL,
+    EDP_SPARQL_URL,
+    EDP_SPARQL_EVALUATION_PUBLISHER,
+    EDP_SPARQL_EVALUATION_KEYWORD
+)
 
-
-OUTPUT = "edp/"
-EDP_SPARQL = 'https://www.europeandataportal.eu/sparql'
 
 def get_file_name(url):
     """
@@ -21,15 +27,13 @@ def get_file_name(url):
     file_name = words[len(words)-1]
     return file_name
 
-
-
 def parse_dataset(url, graph):
     """
     Parses the dataset with URL in the graph
     """
     id = get_file_name(url)
     # https://www.europeandataportal.eu/data/api/datasets/https-opendata-aragon-es-datos-catalogo-dataset-oai-zaguan-unizar-es-94411.ttl?useNormalizedId=true&locale=en
-    ttl_url = 'https://www.europeandataportal.eu/data/api/datasets/'+ id + '.ttl?useNormalizedId=true&locale=en'
+    ttl_url = EDP_API_CKAN_BASE_URL / 'api/datasets/'+ id + '.ttl?useNormalizedId=true&locale=en'
     print(ttl_url)
     try:
         graph.parse(ttl_url, format="turtle")
@@ -174,17 +178,9 @@ def create_folder(ckan_url):
     return output_path
 
 def edp_evaluation():
-    folder = create_folder('edp_all')
-    catalog_file_name = os.path.join(folder,'catalog.ttl')
-    search_datasets(EDP_SPARQL, catalog_file_name, 'MNR')
-    mqa_evaluate = MqaEvaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
-    mqa_evaluate.evaluate()
-
-def edp_minint_evaluation():
-    folder = create_folder('edp_mnr')
-    catalog_file_name = os.path.join(folder,'catalog.ttl')
-    publisher = 'http://datos.gob.es/recurso/sector-publico/org/Organismo/E00003801' ## Ministerio del Interior de España
-    search_datasets_with_publisher(EDP_SPARQL, catalog_file_name, 'MNR', publisher)
+    folder = create_folder(EDP_SPARQL_EVALUATION_PUBLISHER)
+    catalog_file_name = os.path.join(folder,EVALUATION_DEFAULT_FORMAT)
+    search_datasets_with_publisher(EDP_SPARQL_URL, catalog_file_name, EDP_SPARQL_EVALUATION_KEYWORD, EDP_SPARQL_EVALUATION_PUBLISHER)
     mqa_evaluate = MqaEvaluate(catalog_file_name, catalog_format= 'turtle', catalog_type = 'edp')
     mqa_evaluate.evaluate()
 
@@ -194,5 +190,4 @@ if __name__ == '__main__':
             getattr(ssl, '_create_unverified_context', None)):
         ssl._create_default_https_context = ssl._create_unverified_context
 
-    edp_minint_evaluation()
     edp_evaluation()
