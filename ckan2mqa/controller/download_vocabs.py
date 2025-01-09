@@ -81,7 +81,7 @@ class FileTypesRdfFile(RdfFile):
                     non_proprietary_data.add((uri, label))
 
         # Save non-proprietary data to separate CSV
-        non_proprietary_file_name = "non-propietary.csv"
+        non_proprietary_file_name = "non-proprietary.csv"
         save_to_csv(non_proprietary_data, VOCABS_DIR / non_proprietary_file_name)
         logging.info(f"{log_module}:Non-proprietary data extracted and saved to {non_proprietary_file_name}")
 
